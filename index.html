@@ -1,221 +1,557 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Omni Tools - Premium Utility Suite</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<script>
-tailwind.config={darkMode:'class',theme:{extend:{colors:{appBg:'#f9fafb',appCard:'#ffffff',appAccent:'#FF4D67',appAccentHover:'#e63e55',appTextMuted:'#6b7280',appTextDark:'#111827',iconBgPink:'rgba(255,77,103,0.1)',iconBgBlue:'rgba(10,132,255,0.1)',iconBgOrange:'rgba(255,159,10,0.1)',iconBgPurple:'rgba(139,92,246,0.1)',pdfBlue:'#0A84FF',pdfBlueBg:'rgba(10,132,255,0.1)'},fontFamily:{sans:['Inter','-apple-system','BlinkMacSystemFont','sans-serif']},borderRadius:{'4xl':'2rem','5xl':'2.5rem'},boxShadow:{'card':'0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -1px rgba(0,0,0,0.03)','card-hover':'0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)','glow':'0 10px 30px rgba(255,77,103,0.2)'}}}}
-</script>
 <style>
-*{box-sizing:border-box}
-body{background:#f9fafb;color:#111827;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.hide-scrollbar::-webkit-scrollbar{display:none}
-.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -1px rgba(0,0,0,0.03);transition:all .3s ease}
-.glass:hover{background:rgba(255,255,255,0.92);backdrop-filter:blur(30px);transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(255,77,103,0.08),0 4px 6px -2px rgba(0,0,0,0.04);border-color:rgba(255,77,103,0.18)}
-.sidebar-glass{background:rgba(255,255,255,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-right:1px solid rgba(0,0,0,0.06)}
-.search-glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.08);box-shadow:inset 0 2px 4px 0 rgba(0,0,0,0.02);transition:all .3s}
-.search-glass:focus-within{background:#fff;border-color:#FF4D67;box-shadow:0 0 0 3px rgba(255,77,103,0.1)}
-.drop-zone{background:repeating-linear-gradient(-45deg,transparent,transparent 10px,rgba(255,77,103,0.025) 10px,rgba(255,77,103,0.025) 20px)}
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f9fafb;color:#111827;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh;overflow-x:hidden}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit;outline:none}
+a{text-decoration:none;color:inherit}
+ul,ol{list-style:none}
+
+/* ===== CSS VARIABLES ===== */
+:root{
+  --accent:#FF4D67;--accent-hover:#e63e55;--accent-light:rgba(255,77,103,0.1);
+  --blue:#0A84FF;--blue-light:rgba(10,132,255,0.1);
+  --bg:#f9fafb;--white:#ffffff;--card:#ffffff;
+  --text:#111827;--text-muted:#6b7280;--text-light:#9ca3af;
+  --border:#f3f4f6;--border-dark:#e5e7eb;
+  --radius-sm:0.5rem;--radius-md:0.75rem;--radius-lg:1rem;--radius-xl:1.5rem;--radius-2xl:2rem;--radius-full:9999px;
+  --shadow-card:0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -1px rgba(0,0,0,0.03);
+  --shadow-card-hover:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-glow:0 10px 30px rgba(255,77,103,0.2);
+  --sidebar-w:280px;
+  --header-h:64px;--header-h-desktop:80px;
+  --bottomnav-h:64px;
+}
+
+/* ===== AMBIENT BG (desktop) ===== */
+.ambient-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;display:none}
+.ambient-bg .blob-1{position:absolute;top:-10%;right:-5%;width:700px;height:700px;border-radius:50%;background:rgba(255,77,103,0.08);filter:blur(120px)}
+.ambient-bg .blob-2{position:absolute;bottom:-10%;left:-10%;width:500px;height:500px;border-radius:50%;background:rgba(139,92,246,0.05);filter:blur(100px)}
+.ambient-bg .blob-3{position:absolute;top:40%;left:30%;width:300px;height:300px;border-radius:50%;background:rgba(10,132,255,0.04);filter:blur(80px)}
+@media(min-width:768px){.ambient-bg{display:block}}
+
+/* ===== LAYOUT SHELL ===== */
+.app-shell{display:flex;min-height:100vh;width:100%}
+
+/* ===== SIDEBAR ===== */
+.sidebar{position:fixed;left:0;top:0;height:100vh;width:var(--sidebar-w);background:rgba(255,255,255,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-right:1px solid rgba(0,0,0,0.06);z-index:50;padding:20px;display:none;flex-direction:column;transition:all .3s}
+@media(min-width:768px){.sidebar{display:flex}}
+.sidebar-logo{display:flex;align-items:center;gap:12px;margin-bottom:40px;padding:0 8px;margin-top:8px}
+.sidebar-logo-icon{width:40px;height:40px;border-radius:var(--radius-md);background:var(--accent-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sidebar-logo-icon i{color:var(--accent);font-size:18px}
+.sidebar-logo h1{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1}
+.sidebar-logo p{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:0.15em;margin-top:2px}
+.sidebar-nav{flex:1;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-md);color:var(--text-muted);font-size:14px;font-weight:500;transition:all .3s}
+.sidebar-link:hover{color:var(--accent);background:rgba(0,0,0,0.03)}
+.sidebar-link i{width:20px;text-align:center;transition:transform .2s}
+.sidebar-link:hover i{transform:scale(1.1)}
+.sidebar-link.active{background:var(--accent-light);color:var(--accent);font-weight:700}
+.sidebar-footer{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid rgba(0,0,0,0.06)}
+.sidebar-upgrade{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent) 0%,#FF8E53 100%);color:#fff;border-radius:var(--radius-md);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s;box-shadow:0 4px 12px rgba(255,77,103,0.3)}
+.sidebar-upgrade:hover{box-shadow:var(--shadow-glow);transform:translateY(-1px)}
+.sidebar-footer-link{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:var(--radius-md);color:var(--text-muted);font-size:14px;font-weight:500;transition:all .3s}
+.sidebar-footer-link:hover{color:var(--accent);background:rgba(0,0,0,0.03)}
+.sidebar-footer-link.danger:hover{color:#ef4444;background:rgba(239,68,68,0.05)}
+
+/* ===== MAIN WRAPPER ===== */
+.main-wrap{flex:1;margin-left:0;width:100%;min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:10}
+@media(min-width:768px){.main-wrap{margin-left:var(--sidebar-w)}}
+
+/* ===== HEADER ===== */
+.header{position:sticky;top:0;z-index:40;background:rgba(249,250,251,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #f3f4f6;padding:0 16px;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:16px}
+@media(min-width:768px){.header{padding:0 24px;height:var(--header-h-desktop)}}
+.header-left{display:flex;align-items:center;gap:12px;flex:1;max-width:672px}
+.mobile-menu-btn{width:40px;height:40px;border-radius:var(--radius-full);background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:16px}
+@media(min-width:768px){.mobile-menu-btn{display:none}}
+.search-box{position:relative;width:100%;background:rgba(255,255,255,0.8);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.08);box-shadow:inset 0 2px 4px rgba(0,0,0,0.02);border-radius:var(--radius-full);display:flex;align-items:center;padding:0 16px;height:44px;transition:all .3s}
+@media(min-width:768px){.search-box{height:48px}}
+.search-box:focus-within{background:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,77,103,0.1)}
+.search-box i{color:var(--text-light);font-size:14px;flex-shrink:0}
+.search-box input{flex:1;border:none;background:transparent;padding:0 12px;font-size:14px;color:var(--text);height:100%}
+.search-box input::placeholder{color:var(--text-light)}
+.search-shortcut{display:none;align-items:center;gap:4px;margin-left:8px}
+@media(min-width:768px){.search-shortcut{display:flex}}
+.search-shortcut kbd{font-size:10px;color:var(--text-light);border:1px solid var(--border-dark);border-radius:4px;padding:2px 6px;font-family:monospace}
+.header-right{display:none;align-items:center;gap:12px}
+@media(min-width:768px){.header-right{display:flex}}
+.header-icon-btn{width:40px;height:40px;border-radius:var(--radius-full);background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:16px;transition:all .3s}
+.header-icon-btn:hover{color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-card-hover)}
+.header-avatar{width:40px;height:40px;border-radius:var(--radius-full);background:linear-gradient(135deg,var(--accent),#FF8E53);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:transform .2s;box-shadow:0 4px 12px rgba(255,77,103,0.2)}
+.header-avatar:hover{transform:scale(1.05)}
+
+/* ===== CONTENT ===== */
+.content{flex:1;padding:0 16px 96px;max-width:100%}
+@media(min-width:768px){.content{padding:0 24px 32px;max-width:1440px}}
+
+/* ===== PAGE TRANSITION ===== */
 .page-enter{animation:pageIn .35s ease forwards}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes pulse-ring{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.3);opacity:0}}
-.float-anim{animation:float 4s ease-in-out infinite}
-.toggle-track{width:44px;height:24px;border-radius:12px;background:#d1d5db;position:relative;cursor:pointer;transition:background .3s}
-.toggle-track.active{background:#FF4D67}
+
+/* ===== MOBILE HERO CARD ===== */
+.mobile-hero{margin-top:16px;display:block}
+@media(min-width:768px){.mobile-hero{display:none}}
+.hero-card{background:var(--white);border-radius:var(--radius-2xl);padding:24px;position:relative;overflow:hidden;height:180px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow-card);border:1px solid var(--border);cursor:pointer;transition:all .3s}
+.hero-card:hover{box-shadow:var(--shadow-card-hover)}
+.hero-card-top{display:flex;justify-content:space-between;align-items:flex-start}
+.hero-icon{width:48px;height:48px;border-radius:var(--radius-md);background:#f3f4f6;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-card)}
+.hero-icon i{font-size:20px;color:#374151}
+.hero-cta{background:var(--accent);color:#fff;padding:8px 16px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.1em;transition:all .3s;box-shadow:0 4px 12px rgba(255,77,103,0.3)}
+.hero-cta:hover{background:var(--accent-hover)}
+.hero-card-bottom{margin-top:auto;position:relative;z-index:1}
+.hero-card-bottom h2{font-size:24px;font-weight:900;line-height:1;letter-spacing:-0.02em;margin-bottom:4px}
+.hero-card-bottom p{font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase}
+.hero-blob-1{position:absolute;right:-32px;bottom:-32px;width:128px;height:128px;background:rgba(255,77,103,0.1);border-radius:50%;filter:blur(40px)}
+.hero-blob-2{position:absolute;left:-32px;top:-32px;width:128px;height:128px;background:rgba(10,132,255,0.05);border-radius:50%;filter:blur(40px)}
+
+/* ===== DESKTOP WELCOME ===== */
+.desktop-welcome{display:none;margin-bottom:40px;margin-top:24px}
+@media(min-width:768px){.desktop-welcome{display:block}}
+.desktop-welcome h2{font-size:32px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-0.01em}
+.desktop-welcome p{font-size:18px;color:var(--text-muted);line-height:1.6}
+
+/* ===== CATEGORY LABEL ===== */
+.cat-label{color:var(--text-muted);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;padding:0 8px}
+.desktop-section{display:none}
+@media(min-width:768px){.desktop-section{display:block}}
+.mobile-section{display:block;margin-top:24px}
+.mobile-section .cat-group{margin-bottom:24px}
+@media(min-width:768px){.mobile-section{display:none}}
+
+/* ===== DESKTOP TOOL SECTION ===== */
+.dt-section-head{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.dt-section-icon{width:40px;height:40px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid transparent}
+.dt-section-icon.pink{background:var(--accent-light);color:var(--accent);border-color:rgba(255,77,103,0.1)}
+.dt-section-icon.blue{background:var(--blue-light);color:var(--blue);border-color:rgba(10,132,255,0.1)}
+.dt-section-head h3{font-size:24px;font-weight:600;color:var(--text)}
+.dt-section+.dt-section{margin-top:40px}
+
+/* ===== DESKTOP TOOL GRID ===== */
+.dt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(min-width:640px){.dt-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:768px){.dt-grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1024px){.dt-grid{grid-template-columns:repeat(5,1fr)}}
+
+/* ===== MOBILE TOOL GRID (asymmetric) ===== */
+.mob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;grid-auto-flow:dense}
+
+/* ===== TOOL CARD - DESKTOP (glass) ===== */
+.tool-card{background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);box-shadow:var(--shadow-card);border-radius:var(--radius-md);padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;transition:all .3s;cursor:pointer}
+.tool-card:hover{background:rgba(255,255,255,0.92);backdrop-filter:blur(30px);transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(255,77,103,0.08),0 4px 6px -2px rgba(0,0,0,0.04);border-color:rgba(255,77,103,0.18)}
+.tool-card-icon{width:48px;height:48px;border-radius:var(--radius-full);background:#f3f4f6;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-card);transition:transform .2s}
+.tool-card:hover .tool-card-icon{transform:scale(1.1)}
+.tool-card-icon.pink{color:var(--accent)}
+.tool-card-icon.blue{color:var(--blue)}
+.tool-card span{font-size:14px;font-weight:500;color:var(--text);transition:color .2s}
+.tool-card:hover span.pink{color:var(--accent)}
+.tool-card:hover span.blue{color:var(--blue)}
+
+/* ===== MOBILE TOOL CARD VARIANTS ===== */
+.mob-card-featured{grid-column:span 2;grid-row:span 2;background:var(--white);box-shadow:var(--shadow-card);border:1px solid var(--border);border-radius:var(--radius-2xl);padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;transition:all .3s;cursor:pointer;aspect-ratio:1}
+.mob-card-featured:hover{box-shadow:var(--shadow-card-hover)}
+.mob-card-featured .mob-feat-icon{width:64px;height:64px;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center}
+.mob-card-featured .mob-feat-icon.pink{background:var(--accent-light)}
+.mob-card-featured .mob-feat-icon.blue{background:var(--blue-light)}
+.mob-card-featured .mob-feat-icon i{font-size:24px;transition:transform .2s}
+.mob-card-featured:hover .mob-feat-icon i{transform:scale(1.1)}
+.mob-card-featured .mob-feat-icon.pink i{color:var(--accent)}
+.mob-card-featured .mob-feat-icon.blue i{color:var(--blue)}
+.mob-card-featured .mob-feat-name{font-size:14px;font-weight:700;color:var(--text)}
+
+.mob-card-small{background:var(--white);box-shadow:var(--shadow-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;transition:all .3s;cursor:pointer;aspect-ratio:1}
+.mob-card-small:hover{box-shadow:var(--shadow-card-hover)}
+.mob-card-small .mob-sm-icon{width:40px;height:40px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center}
+.mob-card-small .mob-sm-icon.pink{background:var(--accent-light)}
+.mob-card-small .mob-sm-icon.blue{background:var(--blue-light)}
+.mob-card-small .mob-sm-icon i{font-size:14px;transition:transform .2s}
+.mob-card-small:hover .mob-sm-icon i{transform:scale(1.1)}
+.mob-card-small .mob-sm-icon.pink i{color:var(--accent)}
+.mob-card-small .mob-sm-icon.blue i{color:var(--blue)}
+.mob-card-small .mob-sm-name{font-size:10px;font-weight:700;color:var(--text)}
+
+.mob-card-wide{grid-column:span 2;background:var(--white);box-shadow:var(--shadow-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:16px;transition:all .3s;cursor:pointer}
+.mob-card-wide:hover{box-shadow:var(--shadow-card-hover)}
+.mob-card-wide .mob-wd-icon{width:40px;height:40px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mob-card-wide .mob-wd-icon.pink{background:var(--accent-light)}
+.mob-card-wide .mob-wd-icon.blue{background:var(--blue-light)}
+.mob-card-wide .mob-wd-icon i{font-size:14px;transition:transform .2s}
+.mob-card-wide:hover .mob-wd-icon i{transform:scale(1.1)}
+.mob-card-wide .mob-wd-icon.pink i{color:var(--accent)}
+.mob-card-wide .mob-wd-icon.blue i{color:var(--blue)}
+.mob-card-wide .mob-wd-name{font-size:12px;font-weight:700;color:var(--text)}
+
+/* ===== VERSION FOOTER (mobile) ===== */
+.version-footer{text-align:center;margin-top:32px;margin-bottom:16px}
+.version-footer p{font-size:10px;font-weight:700;color:var(--text-light);letter-spacing:0.3em;text-transform:uppercase}
+@media(min-width:768px){.version-footer{display:none}}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb{display:flex;align-items:center;gap:8px;color:var(--accent);font-size:14px;margin-bottom:8px}
+.breadcrumb i{cursor:pointer}
+.breadcrumb span{cursor:pointer;font-weight:500}
+.breadcrumb span:hover{text-decoration:underline}
+
+/* ===== PAGE HEADER ===== */
+.page-header{margin-bottom:32px;margin-top:16px}
+@media(min-width:768px){.page-header{margin-top:24px}}
+.page-header h2{font-size:24px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
+@media(min-width:768px){.page-header h2{font-size:32px}}
+.page-header p{font-size:14px;color:var(--text-muted);margin-top:4px}
+@media(min-width:768px){.page-header p{font-size:16px}}
+
+/* ===== SECTION HEADER (with icon) ===== */
+.sec-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.sec-header-icon{width:40px;height:40px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:16px}
+.sec-header-icon.pink{background:var(--accent-light);color:var(--accent)}
+.sec-header-icon.blue{background:var(--blue-light);color:var(--blue)}
+.sec-header h3{font-size:20px;font-weight:600;color:var(--text)}
+
+/* ===== BENTO LAYOUT ===== */
+.bento{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:1024px){.bento{grid-template-columns:2fr 1fr}}
+.bento-main{display:flex;flex-direction:column;gap:20px}
+.bento-side{display:flex;flex-direction:column;gap:20px}
+
+/* ===== GLASS CARD ===== */
+.g-card{background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);box-shadow:var(--shadow-card);border-radius:var(--radius-xl);padding:24px;transition:all .3s}
+.g-card:hover{background:rgba(255,255,255,0.85);backdrop-filter:blur(24px)}
+
+/* ===== DROPZONE ===== */
+.dropzone{border:2px dashed;border-radius:var(--radius-xl);padding:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:220px;cursor:pointer;transition:all .3s;background:repeating-linear-gradient(-45deg,transparent,transparent 10px,rgba(255,77,103,0.02) 10px,rgba(255,77,103,0.02) 20px)}
+.dropzone.pink{border-color:rgba(255,77,103,0.25)}
+.dropzone.pink:hover{border-color:rgba(255,77,103,0.5)}
+.dropzone.blue{border-color:rgba(10,132,255,0.25)}
+.dropzone.blue:hover{border-color:rgba(10,132,255,0.5)}
+.dropzone-icon{width:64px;height:64px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.dropzone-icon.pink{background:var(--accent-light);color:var(--accent)}
+.dropzone-icon.blue{background:var(--blue-light);color:var(--blue)}
+.dropzone-icon i{font-size:24px}
+.dropzone h3{font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px}
+.dropzone p{font-size:14px;color:var(--text-muted);margin-bottom:20px}
+.dropzone-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--white);border:1px solid var(--border-dark);border-radius:var(--radius-full);font-size:14px;color:var(--text);box-shadow:var(--shadow-card);transition:all .2s}
+.dropzone-btn:hover{background:#f9fafb}
+.dropzone-btn i{font-size:12px}
+
+/* ===== FLOATING ICON ANIM ===== */
+@keyframes floatAnim{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.float-anim{animation:floatAnim 4s ease-in-out infinite}
+
+/* ===== FILE LIST ===== */
+.file-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.file-list-header h4{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:700}
+.file-list-header button{font-size:12px;color:#ef4444;font-weight:600;display:flex;align-items:center;gap:4px}
+.file-list-header button:hover{text-decoration:underline}
+.file-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:var(--radius-md);background:rgba(255,255,255,0.6);border:1px solid var(--border);transition:all .3s;margin-bottom:12px}
+.file-item:last-child{margin-bottom:0}
+.file-item:hover{background:rgba(255,255,255,0.9)}
+.file-item-left{display:flex;align-items:center;gap:12px}
+.file-item-grip{color:var(--text-light);cursor:grab;font-size:16px}
+.file-item-grip:active{cursor:grabbing}
+.file-item-grip:hover{color:var(--accent)}
+.file-item-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+.file-item-icon.pdf{background:#fef2f2;color:#ef4444}
+.file-item-icon.img{background:var(--accent-light);color:var(--accent)}
+.file-item-info h5{font-size:14px;font-weight:600;color:var(--text)}
+.file-item-info p{font-size:12px;color:var(--text-muted)}
+.file-item-actions{display:flex;align-items:center;gap:4px;opacity:0;transition:opacity .2s}
+.file-item:hover .file-item-actions{opacity:1}
+.file-action-btn{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;transition:all .2s}
+.file-action-btn.view:hover{color:var(--accent);background:var(--accent-light)}
+.file-action-btn.del:hover{color:#ef4444;background:#fef2f2}
+.empty-state{text-align:center;padding:32px;color:var(--text-muted);font-size:14px}
+
+/* ===== SETTINGS PANEL ===== */
+.settings-panel{position:sticky;top:96px}
+.settings-panel h3{font-size:18px;font-weight:600;color:var(--text);margin-bottom:4px}
+.settings-panel>p{font-size:12px;color:var(--text-muted);margin-bottom:20px}
+.setting-group{display:flex;flex-direction:column;gap:20px;flex:1}
+.setting-label{display:block;font-size:14px;color:var(--text);margin-bottom:8px;font-weight:500}
+.setting-label-sm{display:block;font-size:12px;color:var(--text-muted);margin-bottom:8px;font-weight:500}
+
+/* ===== FORM ELEMENTS ===== */
+.form-select{width:100%;appearance:none;background:var(--white);border:1px solid var(--border-dark);border-radius:var(--radius-md);padding:10px 16px;font-size:14px;color:var(--text);cursor:pointer;transition:all .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,77,103,0.1)}
+.form-input{width:100%;background:var(--white);border:1px solid var(--border-dark);border-radius:var(--radius-md);padding:10px 16px;font-size:14px;color:var(--text);transition:all .2s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,77,103,0.1)}
+.form-input-suffix{display:flex;align-items:center}
+.form-input-suffix .form-input{border-radius:var(--radius-md) 0 0 var(--radius-md);border-right:none}
+.form-input-suffix .suffix{background:#f3f4f6;border:1px solid var(--border-dark);border-left:none;border-radius:0 var(--radius-md) var(--radius-md) 0;padding:10px 16px;font-size:14px;color:var(--text-muted);white-space:nowrap}
+.dim-row{display:flex;align-items:center;gap:12px}
+.dim-row .form-input{text-align:center}
+.dim-link{width:32px;height:32px;border-radius:var(--radius-full);background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:24px;transition:all .2s;font-size:14px}
+.dim-link:hover{background:rgba(255,77,103,0.2)}
+
+/* ===== RADIO CARDS ===== */
+.radio-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.radio-card-label{cursor:pointer}
+.radio-card-label input{position:absolute;opacity:0;pointer-events:none}
+.radio-card{display:flex;flex-direction:column;align-items:center;padding:12px 8px;border-radius:var(--radius-md);border:1px solid var(--border-dark);transition:all .2s;text-align:center}
+.radio-card i{font-size:20px;margin-bottom:4px;color:var(--text-muted)}
+.radio-card span{font-size:12px;font-weight:600;color:var(--text-muted)}
+.radio-card-label input:checked+.radio-card{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.radio-card-label input:checked+.radio-card i,.radio-card-label input:checked+.radio-card span{color:var(--accent)}
+
+/* ===== FORMAT PILLS ===== */
+.format-pills{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.format-pill-label{cursor:pointer}
+.format-pill-label input{position:absolute;opacity:0;pointer-events:none}
+.format-pill{display:flex;align-items:center;justify-content:center;padding:8px;border-radius:var(--radius-md);border:1px solid var(--border-dark);font-size:12px;font-weight:600;color:var(--text-muted);transition:all .2s}
+.format-pill-label input:checked+.format-pill{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+
+/* ===== PRESET CHIPS ===== */
+.preset-chips{display:flex;flex-wrap:wrap;gap:8px}
+.preset-chip{padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--border-dark);font-size:12px;color:var(--text-muted);transition:all .2s;background:transparent}
+.preset-chip:hover{background:#f3f4f6}
+.preset-chip.active{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+
+/* ===== TOGGLE ===== */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding-top:8px}
+.toggle-info span{display:block}
+.toggle-info .t-title{font-size:14px;color:var(--text);font-weight:500}
+.toggle-info .t-desc{font-size:12px;color:var(--text-muted)}
+.toggle{width:44px;height:24px;border-radius:12px;background:#d1d5db;position:relative;cursor:pointer;transition:background .3s;flex-shrink:0}
+.toggle.on{background:var(--accent)}
 .toggle-knob{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .3s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
-.toggle-track.active .toggle-knob{transform:translateX(20px)}
-.liquid-slider{-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#e5e7eb;outline:none}
-.liquid-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#FF4D67;cursor:pointer;box-shadow:0 2px 8px rgba(255,77,103,0.35);transition:transform .2s}
-.liquid-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
-.liquid-slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#FF4D67;cursor:pointer;border:none;box-shadow:0 2px 8px rgba(255,77,103,0.35)}
-.toast-enter{animation:toastIn .4s ease forwards}
-.toast-exit{animation:toastOut .3s ease forwards}
+.toggle.on .toggle-knob{transform:translateX(20px)}
+
+/* ===== SLIDER ===== */
+.slider-wrap{margin-top:4px}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.slider-val{font-size:12px;color:var(--accent);background:var(--accent-light);padding:2px 8px;border-radius:4px;font-weight:600}
+.slider-range{display:flex;justify-content:space-between;margin-top:6px}
+.slider-range span{font-size:10px;color:var(--text-light)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:#e5e7eb;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 2px 8px rgba(255,77,103,0.35);transition:transform .2s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(255,77,103,0.35)}
+
+/* ===== CORAL CTA BUTTON ===== */
+.cta-btn{width:100%;padding:16px;border-radius:var(--radius-md);font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s;background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4);border:none;cursor:pointer}
+.cta-btn:hover{transform:scale(1.02);box-shadow:0 12px 24px -4px rgba(255,107,107,0.45)}
+.cta-btn:active{transform:scale(0.98)}
+.cta-note{text-align:center;font-size:12px;color:var(--text-muted);margin-top:12px}
+.cta-divider{margin-top:24px;padding-top:24px;border-top:1px solid var(--border)}
+
+/* ===== IMAGE PREVIEW AREA ===== */
+.preview-area{background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);box-shadow:var(--shadow-card);border-radius:var(--radius-xl);padding:20px;display:flex;flex-direction:column;min-height:400px;position:relative;overflow:hidden;transition:all .3s}
+@media(min-width:768px){.preview-area{min-height:560px}}
+.preview-checker{position:absolute;inset:0;opacity:.3;background-image:url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='%23e5e7eb' opacity='0.5'/%3E%3C/svg%3E")}
+.preview-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;position:relative;z-index:1;flex-wrap:wrap;gap:8px}
+.preview-badge{padding:4px 12px;border-radius:var(--radius-full);font-size:12px;backdrop-filter:blur(12px);border:1px solid}
+.preview-badge.default{background:rgba(255,255,255,0.8);color:var(--text-muted);border-color:var(--border-dark)}
+.preview-badge.accent{background:var(--accent-light);color:var(--accent);border-color:rgba(255,77,103,0.2)}
+.preview-badge.blue-accent{background:var(--blue-light);color:var(--blue);border-color:rgba(10,132,255,0.2)}
+.preview-fit{width:32px;height:32px;border-radius:var(--radius-full);background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;color:var(--text-muted);border:1px solid var(--border-dark);backdrop-filter:blur(12px);font-size:14px;transition:all .2s;cursor:pointer}
+.preview-fit:hover{color:var(--accent)}
+.preview-canvas{flex:1;width:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;border:2px dashed var(--border-dark);border-radius:var(--radius-md);background:rgba(255,255,255,0.3);backdrop-filter:blur(8px);overflow:hidden;cursor:pointer}
+.preview-canvas img{max-width:100%;max-height:100%;object-fit:contain;drop-shadow:0 8px 24px rgba(0,0,0,0.1);padding:12px;transition:transform .5s}
+.preview-canvas:hover img{transform:scale(1.02)}
+.preview-empty{text-align:center;padding:32px}
+.preview-empty-icon{width:64px;height:64px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.preview-empty-icon.pink{background:var(--accent-light);color:var(--accent)}
+.preview-empty-icon.blue{background:var(--blue-light);color:var(--blue)}
+.preview-empty-icon i{font-size:24px}
+.preview-empty h4{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px}
+.preview-empty p{font-size:14px;color:var(--text-muted)}
+
+/* ===== IMAGE EDITOR LAYOUT ===== */
+.img-editor{display:flex;flex-direction:column;gap:20px}
+@media(min-width:1024px){.img-editor{flex-direction:row;align-items:flex-start}}
+.img-editor .preview-area{flex:1;min-width:0}
+.img-editor-side{width:100%;display:flex;flex-direction:column;gap:20px;flex-shrink:0}
+@media(min-width:1024px){.img-editor-side{width:360px}}
+
+/* ===== SEARCH OVERLAY ===== */
+.search-overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);display:none}
+.search-overlay.open{display:block}
+.search-overlay-box{position:absolute;top:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:560px;background:var(--white);border-radius:var(--radius-xl);box-shadow:0 25px 50px -12px rgba(0,0,0,0.15);border:1px solid var(--border);overflow:hidden;max-height:60vh;display:flex;flex-direction:column}
+@media(min-width:768px){.search-overlay-box{top:96px}}
+.search-overlay-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.search-overlay-header i{color:var(--text-light)}
+.search-overlay-header input{flex:1;border:none;background:transparent;font-size:14px;color:var(--text)}
+.search-overlay-header input::placeholder{color:var(--text-light)}
+.search-overlay-close{color:var(--text-light);font-size:16px;padding:4px}
+.search-overlay-close:hover{color:var(--text)}
+.search-results{overflow-y:auto;padding:8px}
+.search-result-item{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-md);transition:background .2s;text-align:left}
+.search-result-item:hover{background:#f9fafb}
+.search-result-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.search-result-icon.pink{background:var(--accent-light);color:var(--accent)}
+.search-result-icon.blue{background:var(--blue-light);color:var(--blue)}
+.search-result-info{flex:1;min-width:0}
+.search-result-info h5{font-size:14px;font-weight:500;color:var(--text)}
+.search-result-info p{font-size:12px;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-result-arrow{color:var(--text-light);font-size:12px}
+.search-empty{text-align:center;padding:32px;color:var(--text-muted);font-size:14px}
+
+/* ===== MOBILE BOTTOM NAV ===== */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border-dark);z-index:50;padding:12px 16px;display:flex;justify-content:space-around;align-items:center}
+@media(min-width:768px){.bottom-nav{display:none}}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-light);transition:color .2s;background:none;border:none;cursor:pointer;font-family:inherit}
+.bottom-nav-btn i{font-size:18px}
+.bottom-nav-btn span{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.bottom-nav-btn.active{color:var(--accent)}
+
+/* ===== MOBILE MENU OVERLAY ===== */
+.mobile-menu-overlay{position:fixed;inset:0;z-index:55;display:none}
+.mobile-menu-overlay.open{display:flex}
+.mobile-menu-bg{position:absolute;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px)}
+.mobile-menu-panel{position:relative;left:0;top:0;bottom:0;width:280px;background:var(--white);box-shadow:8px 0 24px rgba(0,0,0,0.1);padding:20px;display:flex;flex-direction:column;z-index:1;animation:slideIn .25s ease}
+@keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+.mobile-menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.mobile-menu-logo{display:flex;align-items:center;gap:12px}
+.mobile-menu-close{width:32px;height:32px;border-radius:var(--radius-full);background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px}
+.mobile-menu-nav{flex:1;display:flex;flex-direction:column;gap:4px}
+.mobile-menu-link{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius-md);color:var(--text-muted);font-size:14px;font-weight:500;transition:all .2s}
+.mobile-menu-link:hover{color:var(--accent);background:#f9fafb}
+.mobile-menu-link i{width:20px;text-align:center}
+.mobile-menu-upgrade{margin-top:16px;width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),#FF8E53);color:#fff;border-radius:var(--radius-md);font-size:14px;font-weight:700;text-align:center;cursor:pointer;border:none}
+
+/* ===== TOAST ===== */
+.toast-container{position:fixed;top:80px;right:16px;z-index:70;display:flex;flex-direction:column;gap:8px;width:320px}
+@media(min-width:768px){.toast-container{top:96px;right:24px}}
+.toast{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--white);border-radius:var(--radius-md);box-shadow:0 10px 25px -5px rgba(0,0,0,0.12);border:1px solid var(--border);animation:toastIn .4s ease forwards}
+.toast.exit{animation:toastOut .3s ease forwards}
+.toast i{font-size:16px;flex-shrink:0}
+.toast i.success{color:#10b981}
+.toast i.error{color:#ef4444}
+.toast i.info{color:var(--blue)}
+.toast span{flex:1;font-size:14px;font-weight:500;color:var(--text)}
+.toast-close{color:var(--text-light);font-size:12px;padding:4px}
+.toast-close:hover{color:var(--text)}
 @keyframes toastIn{from{opacity:0;transform:translateY(-20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-20px) scale(.95)}}
-.file-item{transition:all .3s}
-.file-item:hover{background:rgba(255,255,255,0.9)}
-@media(max-width:767px){.mobile-full{padding-left:1.5rem;padding-right:1.5rem}}
+
+/* ===== FILES PAGE ===== */
+.file-row{display:flex;align-items:center;justify-content:space-between;padding:16px;border-radius:var(--radius-md);transition:all .3s}
+.file-row:hover{background:rgba(255,255,255,0.9)}
+.file-row-left{display:flex;align-items:center;gap:12px}
+.file-row-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+.file-row-icon.pdf{background:var(--blue-light);color:var(--blue)}
+.file-row-icon.img{background:var(--accent-light);color:var(--accent)}
+.file-row-info h5{font-size:14px;font-weight:600;color:var(--text)}
+.file-row-info p{font-size:12px;color:var(--text-muted)}
+.file-row-del{color:var(--text-light);padding:8px;transition:color .2s;font-size:14px}
+.file-row-del:hover{color:#ef4444}
+
+/* ===== EMPTY PAGE STATE ===== */
+.empty-page{padding:48px 24px;text-align:center}
+.empty-page-icon{width:80px;height:80px;border-radius:var(--radius-full);background:#f3f4f6;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.empty-page-icon i{font-size:28px;color:var(--text-light)}
+.empty-page h3{font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px}
+.empty-page p{font-size:14px;color:var(--text-muted);margin-bottom:20px}
+.empty-page-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#fff;border-radius:var(--radius-full);font-size:14px;font-weight:700;transition:all .2s;border:none;cursor:pointer}
+.empty-page-btn:hover{background:var(--accent-hover)}
+
+/* ===== SETTINGS PAGE ===== */
+.settings-page{max-width:672px}
+.settings-card{margin-bottom:16px}
+.settings-card h3{font-size:16px;font-weight:600;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.settings-card h3 i{color:var(--accent);font-size:14px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-row-info span{display:block}
+.settings-row-info .sr-title{font-size:14px;color:var(--text);font-weight:500}
+.settings-row-info .sr-desc{font-size:12px;color:var(--text-muted)}
+.storage-bar{width:100%;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden;margin-bottom:12px}
+.storage-bar-fill{height:100%;background:linear-gradient(135deg,var(--accent),#FF8E53);border-radius:4px;transition:width .3s}
+.settings-link{font-size:14px;color:var(--accent);font-weight:500;cursor:pointer}
+.settings-link:hover{text-decoration:underline}
+.about-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
+.about-row span:first-child{color:var(--text-muted)}
+.about-row span:last-child{color:var(--text);font-weight:500}
 </style>
 </head>
-<body class="min-h-screen flex font-sans overflow-x-hidden">
+<body>
+<!-- Ambient BG -->
+<div class="ambient-bg"><div class="blob-1"></div><div class="blob-2"></div><div class="blob-3"></div></div>
 
-<!-- Ambient Background (desktop only) -->
-<div class="hidden md:block fixed inset-0 z-0 pointer-events-none opacity-50">
-<div class="absolute -top-[10%] -right-[5%] w-[700px] h-[700px] rounded-full bg-appAccent/8 blur-[120px]"></div>
-<div class="absolute -bottom-[10%] -left-[10%] w-[500px] h-[500px] rounded-full bg-purple-500/5 blur-[100px]"></div>
-<div class="absolute top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-blue-400/4 blur-[80px]"></div>
-</div>
-
-<!-- ===== SIDEBAR (Desktop) ===== -->
-<nav id="sidebar" class="hidden md:flex fixed left-0 top-0 h-screen w-[280px] flex-col sidebar-glass z-50 p-5 transition-all duration-300">
-<div class="flex items-center gap-3 mb-10 px-2 mt-2">
-<div class="w-10 h-10 rounded-xl bg-appAccent/10 flex items-center justify-center shrink-0">
-<i class="fa-solid fa-bolt text-appAccent text-lg"></i>
-</div>
-<div>
-<h1 class="text-lg font-extrabold text-appTextDark tracking-tight leading-none">Omni Tools</h1>
-<p class="text-[10px] font-bold text-appAccent tracking-[0.15em] mt-0.5">PRO SUITE</p>
-</div>
-</div>
-<div class="flex-1 flex flex-col gap-1.5" id="sidebar-nav">
-<a data-page="home" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
-<i class="fa-solid fa-house w-5 text-center group-hover:scale-110 transition-transform"></i>
-<span class="text-sm font-medium">Dashboard</span>
-</a>
-<a data-page="image-tools" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
-<i class="fa-solid fa-image w-5 text-center group-hover:scale-110 transition-transform"></i>
-<span class="text-sm font-medium">Image Tools</span>
-</a>
-<a data-page="pdf-tools" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
-<i class="fa-solid fa-file-pdf w-5 text-center group-hover:scale-110 transition-transform"></i>
-<span class="text-sm font-medium">PDF Tools</span>
-</a>
-<a data-page="files" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
-<i class="fa-solid fa-folder-open w-5 text-center group-hover:scale-110 transition-transform"></i>
-<span class="text-sm font-medium">Files</span>
-</a>
-<a data-page="history" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
-<i class="fa-solid fa-clock-rotate-left w-5 text-center group-hover:scale-110 transition-transform"></i>
-<span class="text-sm font-medium">History</span>
-</a>
-<a data-page="settings" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
-<i class="fa-solid fa-gear w-5 text-center group-hover:scale-110 transition-transform"></i>
-<span class="text-sm font-medium">Settings</span>
-</a>
-</div>
-<div class="mt-auto flex flex-col gap-2 pt-4 border-t border-gray-200/60">
-<button onclick="showToast('Pro features coming soon!','info')" class="w-full py-3 bg-gradient-to-r from-appAccent to-[#FF8E53] text-white rounded-xl text-sm font-bold hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2">
-<i class="fa-solid fa-crown text-xs"></i> Upgrade to Pro
-</button>
-<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all" href="#">
-<i class="fa-solid fa-circle-question w-5 text-center"></i>
-<span class="text-sm font-medium">Help</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-appTextMuted hover:text-red-500 hover:bg-red-50 transition-all" href="#">
-<i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
-<span class="text-sm font-medium">Logout</span>
-</a>
-</div>
+<div class="app-shell">
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon"><i class="fa-solid fa-bolt"></i></div>
+    <div><h1>Omni Tools</h1><p>PRO SUITE</p></div>
+  </div>
+  <div class="sidebar-nav" id="sidebar-nav"></div>
+  <div class="sidebar-footer">
+    <button class="sidebar-upgrade" onclick="showToast('Pro features coming soon!','info')"><i class="fa-solid fa-crown" style="font-size:12px"></i> Upgrade to Pro</button>
+    <a class="sidebar-footer-link" href="#"><i class="fa-solid fa-circle-question" style="width:20px;text-align:center"></i> Help</a>
+    <a class="sidebar-footer-link danger" href="#"><i class="fa-solid fa-right-from-bracket" style="width:20px;text-align:center"></i> Logout</a>
+  </div>
 </nav>
 
-<!-- ===== MAIN WRAPPER ===== -->
-<div class="flex-1 md:ml-[280px] w-full min-h-screen flex flex-col relative z-10">
+<!-- MAIN -->
+<div class="main-wrap">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search-input" oninput="handleSearch(this.value)" placeholder="Search tools (e.g., 'compress pdf')..." type="text"/>
+        <div class="search-shortcut"><kbd>Ctrl</kbd><span>+</span><kbd>K</kbd></div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button class="header-icon-btn" onclick="showToast('No new notifications','info')"><i class="fa-solid fa-bell"></i></button>
+      <button class="header-icon-btn" onclick="showToast('Dark mode coming soon','info')"><i class="fa-solid fa-moon"></i></button>
+      <div class="header-avatar">O</div>
+    </div>
+  </header>
 
-<!-- ===== HEADER ===== -->
-<header class="sticky top-0 z-40 bg-appBg/85 backdrop-blur-lg border-b border-gray-100 px-4 md:px-6 h-16 md:h-20 flex items-center justify-between gap-4">
-<div class="flex items-center gap-3 flex-1 max-w-2xl">
-<!-- Mobile Menu -->
-<button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
-<i class="fa-solid fa-bars"></i>
-</button>
-<!-- Search -->
-<div class="relative w-full search-glass rounded-full flex items-center px-4 h-11 md:h-12">
-<i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
-<input id="search-input" oninput="handleSearch(this.value)" class="w-full bg-transparent border-none focus:ring-0 text-appTextDark text-sm placeholder-gray-400 px-3 outline-none" placeholder="Search tools (e.g., 'compress pdf')..." type="text"/>
-<div class="hidden md:flex items-center gap-1">
-<span class="text-[10px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono">Ctrl</span>
-<span class="text-[10px] text-gray-400">+</span>
-<span class="text-[10px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono">K</span>
-</div>
-</div>
-</div>
-<div class="hidden md:flex items-center gap-3">
-<button onclick="showToast('No new notifications','info')" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-500 hover:text-appAccent">
-<i class="fa-solid fa-bell"></i>
-</button>
-<button onclick="toggleDarkMode()" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-500 hover:text-appAccent">
-<i class="fa-solid fa-moon"></i>
-</button>
-<div class="w-10 h-10 rounded-full bg-gradient-to-br from-appAccent to-[#FF8E53] flex items-center justify-center text-white text-sm font-bold cursor-pointer hover:scale-105 transition-transform shadow-md shadow-appAccent/20">O</div>
-</div>
-</header>
-
-<!-- ===== SEARCH RESULTS OVERLAY ===== -->
-<div id="search-overlay" class="hidden fixed inset-0 z-[60] bg-black/20 backdrop-blur-sm" onclick="closeSearch()">
-<div class="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-xl mx-4" onclick="event.stopPropagation()">
-<div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden max-h-[60vh] flex flex-col">
-<div class="p-4 border-b border-gray-100 flex items-center gap-3">
-<i class="fa-solid fa-magnifying-glass text-gray-400"></i>
-<input id="search-overlay-input" oninput="handleOverlaySearch(this.value)" class="flex-1 bg-transparent outline-none text-sm text-appTextDark placeholder-gray-400" placeholder="Type to search tools..."/>
-<button onclick="closeSearch()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
-</div>
-<div id="search-results" class="overflow-y-auto p-2"></div>
-</div>
+  <!-- CONTENT -->
+  <main class="content" id="content"></main>
 </div>
 </div>
 
-<!-- ===== CONTENT AREA ===== -->
-<main id="content" class="flex-1 px-4 md:px-6 pb-24 md:pb-8">
-<!-- Content rendered by JS -->
-</main>
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottom-nav"></nav>
 
-</div>
-
-<!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/92 backdrop-blur-xl border-t border-gray-200 z-50 px-4 py-3">
-<div class="flex justify-around items-center">
-<button onclick="navigate('home')" data-mobnav="home" class="mob-nav-btn flex flex-col items-center gap-1 text-appAccent">
-<i class="fa-solid fa-house text-lg"></i>
-<span class="text-[9px] font-bold tracking-wider uppercase">Home</span>
-</button>
-<button onclick="navigate('files')" data-mobnav="files" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
-<i class="fa-solid fa-folder-open text-lg"></i>
-<span class="text-[9px] font-bold tracking-wider uppercase">Files</span>
-</button>
-<button onclick="navigate('history')" data-mobnav="history" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
-<i class="fa-solid fa-clock-rotate-left text-lg"></i>
-<span class="text-[9px] font-bold tracking-wider uppercase">History</span>
-</button>
-</div>
-</nav>
-
-<!-- ===== MOBILE SIDEBAR OVERLAY ===== -->
-<div id="mobile-menu" class="fixed inset-0 z-[55] hidden">
-<div class="absolute inset-0 bg-black/30 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
-<div class="absolute left-0 top-0 bottom-0 w-[280px] bg-white shadow-2xl p-5 flex flex-col transform transition-transform duration-300" id="mobile-menu-panel">
-<div class="flex items-center justify-between mb-8">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-appAccent/10 flex items-center justify-center">
-<i class="fa-solid fa-bolt text-appAccent text-lg"></i>
-</div>
-<div>
-<h1 class="text-lg font-extrabold text-appTextDark leading-none">Omni Tools</h1>
-<p class="text-[10px] font-bold text-appAccent tracking-[0.15em] mt-0.5">PRO SUITE</p>
-</div>
-</div>
-<button onclick="toggleMobileMenu()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
-<i class="fa-solid fa-xmark text-sm"></i>
-</button>
-</div>
-<div class="flex-1 flex flex-col gap-1">
-<a onclick="navigate('home');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-house w-5 text-center"></i><span class="text-sm font-medium">Dashboard</span></a>
-<a onclick="navigate('image-tools');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-image w-5 text-center"></i><span class="text-sm font-medium">Image Tools</span></a>
-<a onclick="navigate('pdf-tools');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-file-pdf w-5 text-center"></i><span class="text-sm font-medium">PDF Tools</span></a>
-<a onclick="navigate('files');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-folder-open w-5 text-center"></i><span class="text-sm font-medium">Files</span></a>
-<a onclick="navigate('history');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-clock-rotate-left w-5 text-center"></i><span class="text-sm font-medium">History</span></a>
-<a onclick="navigate('settings');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-gear w-5 text-center"></i><span class="text-sm font-medium">Settings</span></a>
-</div>
-<button onclick="showToast('Pro features coming soon!','info');toggleMobileMenu()" class="mt-4 w-full py-3 bg-gradient-to-r from-appAccent to-[#FF8E53] text-white rounded-xl text-sm font-bold">
-<i class="fa-solid fa-crown mr-2 text-xs"></i>Upgrade to Pro
-</button>
-</div>
+<!-- MOBILE MENU -->
+<div class="mobile-menu-overlay" id="mobile-menu">
+  <div class="mobile-menu-bg" onclick="toggleMobileMenu()"></div>
+  <div class="mobile-menu-panel">
+    <div class="mobile-menu-header">
+      <div class="mobile-menu-logo">
+        <div class="sidebar-logo-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div><h1 style="font-size:18px;font-weight:800;color:var(--text);line-height:1">Omni Tools</h1><p style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-top:2px">PRO SUITE</p></div>
+      </div>
+      <button class="mobile-menu-close" onclick="toggleMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="mobile-menu-nav" id="mobile-menu-nav"></div>
+    <button class="mobile-menu-upgrade" onclick="showToast('Pro features coming soon!','info');toggleMobileMenu()"><i class="fa-solid fa-crown" style="font-size:12px;margin-right:6px"></i>Upgrade to Pro</button>
+  </div>
 </div>
 
-<!-- ===== TOAST CONTAINER ===== -->
-<div id="toast-container" class="fixed top-20 right-4 z-[70] flex flex-col gap-2 w-80"></div>
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay" onclick="closeSearch()">
+  <div class="search-overlay-box" onclick="event.stopPropagation()">
+    <div class="search-overlay-header">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="search-overlay-input" oninput="handleOverlaySearch(this.value)" placeholder="Type to search tools..."/>
+      <button class="search-overlay-close" onclick="closeSearch()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-container" id="toast-container"></div>
 
 <script>
-/* =========================================
-   TOOL DATA
-   ========================================= */
-const imageTools = [
+/* ===== DATA ===== */
+const imageTools=[
   {id:'resize',name:'Resize',icon:'fa-up-right-and-down-left-from-center',desc:'Adjust image dimensions',type:'image-editor'},
   {id:'crop',name:'Crop',icon:'fa-crop-simple',desc:'Crop to specific area',type:'image-editor'},
   {id:'filter',name:'Filter',icon:'fa-wand-magic-sparkles',desc:'Apply visual filters',type:'image-editor'},
@@ -227,8 +563,7 @@ const imageTools = [
   {id:'upscale',name:'Upscale',icon:'fa-expand',desc:'Increase resolution with AI',type:'image-editor'},
   {id:'colorize',name:'Colorize',icon:'fa-palette',desc:'Add color to B&W photos',type:'image-editor'}
 ];
-
-const pdfTools = [
+const pdfTools=[
   {id:'merge',name:'Merge',icon:'fa-layer-group',desc:'Combine multiple PDFs',type:'file-list'},
   {id:'split',name:'Split',icon:'fa-scissors',desc:'Extract pages from PDF',type:'file-list'},
   {id:'compress-pdf',name:'Compress',icon:'fa-bolt',desc:'Reduce PDF file size',type:'simple'},
@@ -240,841 +575,354 @@ const pdfTools = [
   {id:'ocr',name:'OCR',icon:'fa-eye',desc:'Extract text from scans',type:'simple'},
   {id:'organize',name:'Organize',icon:'fa-file-circle-plus',desc:'Rearrange PDF pages',type:'file-list'}
 ];
+const allTools=[...imageTools.map(t=>({...t,cat:'image'})),...pdfTools.map(t=>({...t,cat:'pdf'}))];
+const navItems=[
+  {id:'home',icon:'fa-house',label:'Dashboard'},
+  {id:'image-tools',icon:'fa-image',label:'Image Tools'},
+  {id:'pdf-tools',icon:'fa-file-pdf',label:'PDF Tools'},
+  {id:'files',icon:'fa-folder-open',label:'Files'},
+  {id:'history',icon:'fa-clock-rotate-left',label:'History'},
+  {id:'settings',icon:'fa-gear',label:'Settings'}
+];
+const mobNavItems=[
+  {id:'home',icon:'fa-house',label:'Home'},
+  {id:'files',icon:'fa-folder-open',label:'Files'},
+  {id:'history',icon:'fa-clock-rotate-left',label:'History'}
+];
 
-const allTools = [...imageTools.map(t=>({...t,cat:'image'})),...pdfTools.map(t=>({...t,cat:'pdf'}))];
+/* ===== STATE ===== */
+let currentPage='home';
+let uploadedFiles={};
 
-/* =========================================
-   STATE
-   ========================================= */
-let currentPage = 'home';
-let uploadedFiles = {};
-let searchQuery = '';
+/* ===== INIT NAV ===== */
+function initNav(){
+  const sb=document.getElementById('sidebar-nav');
+  const mn=document.getElementById('mobile-menu-nav');
+  const bn=document.getElementById('bottom-nav');
+  sb.innerHTML=navItems.map(n=>`<a class="sidebar-link" data-page="${n.id}" onclick="navigate('${n.id}')"><i class="fa-solid ${n.icon}"></i><span>${n.label}</span></a>`).join('');
+  mn.innerHTML=navItems.map(n=>`<a class="mobile-menu-link" onclick="navigate('${n.id}');toggleMobileMenu()"><i class="fa-solid ${n.icon}"></i><span>${n.label}</span></a>`).join('');
+  bn.innerHTML=mobNavItems.map(n=>`<button class="bottom-nav-btn" data-mobnav="${n.id}" onclick="navigate('${n.id}')"><i class="fa-solid ${n.icon}"></i><span>${n.label}</span></button>`).join('');
+}
 
-/* =========================================
-   NAVIGATION
-   ========================================= */
-function navigate(page, data) {
-  currentPage = page;
+/* ===== NAVIGATE ===== */
+function navigate(page){
+  currentPage=page;
   window.scrollTo({top:0,behavior:'smooth'});
-  renderPage(page, data);
+  renderPage(page);
   updateNav(page);
 }
-
-function updateNav(page) {
-  // Sidebar
-  document.querySelectorAll('.sidebar-link').forEach(el => {
-    const p = el.dataset.page;
-    const isActive = (page === 'home' && p === 'home') ||
-                     (page === 'image-tools' && p === 'image-tools') ||
-                     (page === 'pdf-tools' && p === 'pdf-tools') ||
-                     (page === 'files' && p === 'files') ||
-                     (page === 'history' && p === 'history') ||
-                     (page === 'settings' && p === 'settings') ||
-                     (page.startsWith('tool/') && (p === 'image-tools' || p === 'pdf-tools'));
-    if (isActive) {
-      el.className = 'sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl bg-appAccent/10 text-appAccent font-bold transition-all duration-300';
-    } else {
-      el.className = 'sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group';
-    }
+function updateNav(page){
+  document.querySelectorAll('.sidebar-link').forEach(el=>{
+    const p=el.dataset.page;
+    const active=(page==='home'&&p==='home')||(page==='image-tools'&&p==='image-tools')||(page==='pdf-tools'&&p==='pdf-tools')||(page==='files'&&p==='files')||(page==='history'&&p==='history')||(page==='settings'&&p==='settings')||(page.startsWith('tool/')&&(p==='image-tools'||p==='pdf-tools'));
+    el.classList.toggle('active',active);
   });
-  // Mobile nav
-  document.querySelectorAll('.mob-nav-btn').forEach(el => {
-    const p = el.dataset.mobnav;
-    const isActive = (page === 'home' && p === 'home') || (page === 'files' && p === 'files') || (page === 'history' && p === 'history');
-    el.className = `mob-nav-btn flex flex-col items-center gap-1 ${isActive ? 'text-appAccent' : 'text-gray-400'}`;
+  document.querySelectorAll('.bottom-nav-btn').forEach(el=>{
+    const p=el.dataset.mobnav;
+    const active=(page==='home'&&p==='home')||(page==='files'&&p==='files')||(page==='history'&&p==='history');
+    el.classList.toggle('active',active);
   });
 }
 
-/* =========================================
-   PAGE RENDERER
-   ========================================= */
-function renderPage(page, data) {
-  const c = document.getElementById('content');
-  if (page === 'home') c.innerHTML = renderHomePage();
-  else if (page === 'image-tools') c.innerHTML = renderCategoryPage('image', 'Image Tools', 'fa-image', iconBgPink, 'appAccent');
-  else if (page === 'pdf-tools') c.innerHTML = renderCategoryPage('pdf', 'PDF Tools', 'fa-file-pdf', pdfBlueBg, 'pdfBlue');
-  else if (page === 'files') c.innerHTML = renderFilesPage();
-  else if (page === 'history') c.innerHTML = renderHistoryPage();
-  else if (page === 'settings') c.innerHTML = renderSettingsPage();
-  else if (page.startsWith('tool/')) {
-    const toolId = page.replace('tool/','');
-    const tool = allTools.find(t => t.id === toolId);
-    if (tool) c.innerHTML = renderToolPage(tool);
+/* ===== RENDER ===== */
+function renderPage(page){
+  const c=document.getElementById('content');
+  if(page==='home')c.innerHTML=renderHome();
+  else if(page==='image-tools')c.innerHTML=renderCatPage('image','Image Tools','fa-image');
+  else if(page==='pdf-tools')c.innerHTML=renderCatPage('pdf','PDF Tools','fa-file-pdf');
+  else if(page==='files')c.innerHTML=renderFilesPage();
+  else if(page==='history')c.innerHTML=renderHistoryPage();
+  else if(page==='settings')c.innerHTML=renderSettingsPage();
+  else if(page.startsWith('tool/')){
+    const t=allTools.find(x=>x.id===page.replace('tool/',''));
+    if(t)c.innerHTML=renderToolPage(t);
   }
-  c.querySelector('.page-enter')?.offsetHeight; // trigger reflow
 }
 
-/* =========================================
-   HOME PAGE
-   ========================================= */
-function renderHomePage() {
+/* ===== HOME ===== */
+function renderHome(){
   return `<div class="page-enter">
-  <!-- Mobile Hero Card -->
-  <section class="md:hidden mt-4">
-    <div class="bg-white rounded-4xl p-6 relative overflow-hidden h-[180px] flex flex-col justify-between shadow-card border border-gray-50 cursor-pointer" onclick="navigate('files')">
-      <div class="flex justify-between items-start">
-        <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center shadow-sm">
-          <i class="fa-solid fa-arrow-up-from-bracket text-xl text-gray-700"></i>
-        </div>
-        <button class="bg-appAccent hover:bg-appAccentHover text-white px-4 py-2 rounded-full text-[10px] font-bold tracking-wider transition-colors shadow-lg shadow-appAccent/30">
-          START SESSION
-        </button>
-      </div>
-      <div class="mt-auto z-10 relative">
-        <h2 class="text-2xl font-black leading-none tracking-tight mb-1">Select File</h2>
-        <p class="text-gray-500 text-[9px] font-bold tracking-widest uppercase">Tap to load storage</p>
-      </div>
-      <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-appAccent/10 rounded-full blur-2xl"></div>
-      <div class="absolute -left-8 -top-8 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl"></div>
-    </div>
-  </section>
-
-  <!-- Desktop Welcome -->
-  <section class="hidden md:block mb-10 mt-6">
-    <h2 class="text-3xl font-bold text-appTextDark mb-2 tracking-tight">Welcome to Omni Tools</h2>
-    <p class="text-lg text-appTextMuted">Select a tool below to instantly process your files securely in the browser.</p>
-  </section>
-
-  <!-- Mobile: Image Tools Grid -->
-  <section class="md:hidden mt-6 flex flex-col gap-6">
-    ${renderMobileToolGrid('image')}
-    ${renderMobileToolGrid('pdf')}
-    <div class="text-center mt-8 mb-4">
-      <p class="text-gray-400 text-[10px] font-bold tracking-[0.3em] uppercase">OMNI TOOLS V2.0.1</p>
-    </div>
-  </section>
-
-  <!-- Desktop: Tool Sections -->
-  <section class="hidden md:block mt-2">
-    ${renderDesktopToolSection('Image Tools', 'fa-image', imageTools, 'appAccent', iconBgPink)}
-    <div class="my-10"></div>
-    ${renderDesktopToolSection('PDF Tools', 'fa-file-pdf', pdfTools, 'pdfBlue', pdfBlueBg)}
-  </section>
+  <div class="mobile-hero"><div class="hero-card" onclick="navigate('files')">
+    <div class="hero-card-top"><div class="hero-icon"><i class="fa-solid fa-arrow-up-from-bracket"></i></div><button class="hero-cta">START SESSION</button></div>
+    <div class="hero-card-bottom"><h2>Select File</h2><p>Tap to load storage</p></div>
+    <div class="hero-blob-1"></div><div class="hero-blob-2"></div>
+  </div></div>
+  <div class="desktop-welcome"><h2>Welcome to Omni Tools</h2><p>Select a tool below to instantly process your files securely in the browser.</p></div>
+  <div class="mobile-section">
+    <div class="cat-group">${renderMobGrid('image')}</div>
+    <div class="cat-group">${renderMobGrid('pdf')}</div>
+    <div class="version-footer"><p>OMNI TOOLS V2.0.1</p></div>
+  </div>
+  <div class="desktop-section">
+    <div class="dt-section"><div class="dt-section-head"><div class="dt-section-icon pink"><i class="fa-solid fa-image"></i></div><h3>Image Tools</h3></div><div class="dt-grid">${imageTools.map(t=>renderDtCard(t)).join('')}</div></div>
+    <div class="dt-section"><div class="dt-section-head"><div class="dt-section-icon blue"><i class="fa-solid fa-file-pdf"></i></div><h3>PDF Tools</h3></div><div class="dt-grid">${pdfTools.map(t=>renderDtCard(t)).join('')}</div></div>
+  </div>
 </div>`;
 }
 
-/* Mobile Tool Grid - asymmetric layout like reference */
-function renderMobileToolGrid(cat) {
-  const tools = cat === 'image' ? imageTools : pdfTools;
-  const color = cat === 'image' ? 'appAccent' : 'pdfBlue';
-  const bg = cat === 'image' ? 'iconBgPink' : 'pdfBlueBg';
-  const label = cat === 'image' ? 'Image Tools' : 'PDF Tools';
-  let html = `<div><h3 class="text-appTextMuted text-[10px] font-bold tracking-[0.2em] mb-3 px-2 uppercase">${label}</h3><div class="grid grid-cols-3 gap-3 grid-flow-row-dense">`;
-  tools.forEach((t, i) => {
-    if (i === 0) {
-      html += `<button onclick="navigate('tool/${t.id}')" class="col-span-2 row-span-2 bg-white shadow-card border border-gray-50 rounded-[2rem] p-4 flex flex-col items-center justify-center gap-3 text-center hover:shadow-card-hover transition-all duration-300 group aspect-square">
-        <div class="w-16 h-16 rounded-2xl bg-${bg} flex items-center justify-center">
-          <i class="fa-solid ${t.icon} text-${color} text-2xl group-hover:scale-110 transition-transform"></i>
-        </div>
-        <span class="text-appTextDark text-sm font-bold">${t.name}</span>
-      </button>`;
-    } else if (i === 3 || i === 7) {
-      html += `<button onclick="navigate('tool/${t.id}')" class="col-span-2 row-span-1 bg-white shadow-card border border-gray-50 rounded-2xl p-4 flex flex-row items-center justify-start gap-4 hover:shadow-card-hover transition-all duration-300 group">
-        <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center shrink-0">
-          <i class="fa-solid ${t.icon} text-${color} text-sm group-hover:scale-110 transition-transform"></i>
-        </div>
-        <span class="text-appTextDark text-xs font-bold">${t.name}</span>
-      </button>`;
-    } else {
-      html += `<button onclick="navigate('tool/${t.id}')" class="bg-white shadow-card border border-gray-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center hover:shadow-card-hover transition-all duration-300 group aspect-square">
-        <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center">
-          <i class="fa-solid ${t.icon} text-${color} text-sm group-hover:scale-110 transition-transform"></i>
-        </div>
-        <span class="text-appTextDark text-[10px] font-bold">${t.name}</span>
-      </button>`;
-    }
+function renderDtCard(t){
+  const c=t.cat==='image'?'pink':'blue';
+  return `<button class="tool-card" onclick="navigate('tool/${t.id}')"><div class="tool-card-icon ${c}"><i class="fa-solid ${t.icon}"></i></div><span class="${c}">${t.name}</span></button>`;
+}
+
+function renderMobGrid(cat){
+  const tools=cat==='image'?imageTools:pdfTools;
+  const c=cat==='image'?'pink':'blue';
+  let h=`<div class="cat-label">${cat==='image'?'Image Tools':'PDF Tools'}</div><div class="mob-grid">`;
+  tools.forEach((t,i)=>{
+    if(i===0) h+=`<button class="mob-card-featured" onclick="navigate('tool/${t.id}')"><div class="mob-feat-icon ${c}"><i class="fa-solid ${t.icon}"></i></div><div class="mob-feat-name">${t.name}</div></button>`;
+    else if(i===3||i===7) h+=`<button class="mob-card-wide" onclick="navigate('tool/${t.id}')"><div class="mob-wd-icon ${c}"><i class="fa-solid ${t.icon}"></i></div><div class="mob-wd-name">${t.name}</div></button>`;
+    else h+=`<button class="mob-card-small" onclick="navigate('tool/${t.id}')"><div class="mob-sm-icon ${c}"><i class="fa-solid ${t.icon}"></i></div><div class="mob-sm-name">${t.name}</div></button>`;
   });
-  html += `</div></div>`;
-  return html;
+  return h+'</div>';
 }
 
-/* Desktop Tool Section */
-function renderDesktopToolSection(title, icon, tools, color, bg) {
-  let cards = tools.map(t => `
-    <button onclick="navigate('tool/${t.id}')" class="glass rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 group transition-all cursor-pointer">
-      <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-${color} shadow-sm group-hover:scale-110 transition-transform">
-        <i class="fa-solid ${t.icon}"></i>
-      </div>
-      <span class="text-sm font-medium text-appTextDark group-hover:text-${color} transition-colors">${t.name}</span>
-    </button>
-  `).join('');
-  return `<section>
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center text-${color} border border-${color}/10">
-        <i class="fa-solid ${icon}"></i>
-      </div>
-      <h3 class="text-2xl font-semibold text-appTextDark">${title}</h3>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">${cards}</div>
-  </section>`;
-}
-
-/* =========================================
-   CATEGORY PAGE (Image Tools / PDF Tools)
-   ========================================= */
-function renderCategoryPage(cat, title, icon, bg, color) {
-  const tools = cat === 'image' ? imageTools : pdfTools;
-  const catLabel = cat === 'image' ? 'image-tools' : 'pdf-tools';
-  let cards = tools.map(t => `
-    <button onclick="navigate('tool/${t.id}')" class="glass rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 group transition-all cursor-pointer">
-      <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-${color} shadow-sm group-hover:scale-110 transition-transform">
-        <i class="fa-solid ${t.icon}"></i>
-      </div>
-      <span class="text-sm font-medium text-appTextDark group-hover:text-${color} transition-colors">${t.name}</span>
-      <span class="text-xs text-appTextMuted hidden md:block">${t.desc}</span>
-    </button>
-  `).join('');
+/* ===== CATEGORY PAGE ===== */
+function renderCatPage(cat,title,icon){
+  const tools=cat==='image'?imageTools:pdfTools;
+  const c=cat==='image'?'pink':'blue';
+  const catPage=cat==='image'?'image-tools':'pdf-tools';
   return `<div class="page-enter">
-    <div class="mb-8 mt-4 md:mt-6">
-      <div class="flex items-center gap-2 text-appAccent mb-2 text-sm">
-        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('home')"></i>
-        <span class="cursor-pointer hover:underline" onclick="navigate('home')">Dashboard</span>
-      </div>
-      <div class="flex items-center gap-3 mb-2">
-        <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center text-${color}">
-          <i class="fa-solid ${icon}"></i>
-        </div>
-        <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${title}</h2>
-      </div>
-      <p class="text-appTextMuted text-sm md:text-base">All ${title.toLowerCase()} in one place. Select a tool to get started.</p>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">${cards}</div>
-  </div>`;
+  <div class="page-header">
+    <div class="breadcrumb"><i class="fa-solid fa-arrow-left" onclick="navigate('home')"></i><span onclick="navigate('home')">Dashboard</span></div>
+    <div class="sec-header" style="margin-bottom:8px"><div class="sec-header-icon ${c}"><i class="fa-solid ${icon}"></i></div><h2>${title}</h2></div>
+    <p>All ${title.toLowerCase()} in one place. Select a tool to get started.</p>
+  </div>
+  <div class="dt-grid">${tools.map(t=>renderDtCard(t)).join('')}</div>
+</div>`;
 }
 
-/* =========================================
-   TOOL DETAIL PAGE
-   ========================================= */
-function renderToolPage(tool) {
-  const cat = tool.cat;
-  const color = cat === 'image' ? 'appAccent' : 'pdfBlue';
-  const bg = cat === 'image' ? iconBgPink : pdfBlueBg;
-  const catName = cat === 'image' ? 'Image Tools' : 'PDF Tools';
-  const catPage = cat === 'image' ? 'image-tools' : 'pdf-tools';
-  const accept = cat === 'image' ? 'image/*' : '.pdf';
-  const toolFiles = uploadedFiles[tool.id] || [];
+/* ===== TOOL PAGE ===== */
+function renderToolPage(tool){
+  const c=tool.cat==='image'?'pink':'blue';
+  const color=tool.cat==='image'?'var(--accent)':'var(--blue)';
+  const bgClass=tool.cat==='image'?'pink':'blue';
+  const catName=tool.cat==='image'?'Image Tools':'PDF Tools';
+  const catPage=tool.cat==='image'?'image-tools':'pdf-tools';
+  const accept=tool.cat==='image'?'image/*':'.pdf';
+  const tf=uploadedFiles[tool.id]||[];
 
-  if (tool.id === 'merge' || tool.id === 'split' || tool.id === 'organize') {
-    return renderFileListToolPage(tool, color, bg, catName, catPage, accept, toolFiles);
-  }
-  if (tool.type === 'image-editor') {
-    return renderImageEditorToolPage(tool, color, bg, catName, catPage, accept, toolFiles);
-  }
-  return renderSimpleToolPage(tool, color, bg, catName, catPage, accept, toolFiles);
+  if(tool.type==='file-list')return renderFileListTool(tool,c,color,bgClass,catName,catPage,accept,tf);
+  if(tool.type==='image-editor')return renderImageEditorTool(tool,c,color,bgClass,catName,catPage,accept,tf);
+  return renderSimpleTool(tool,c,color,bgClass,catName,catPage,accept,tf);
 }
 
-/* File List Tool (Merge PDF, Split, Organize) */
-function renderFileListToolPage(tool, color, bg, catName, catPage, accept, toolFiles) {
-  const fileItems = toolFiles.map((f,i) => `
-    <div class="file-item flex items-center justify-between p-3 rounded-xl bg-white/60 border border-gray-100 group">
-      <div class="flex items-center gap-3">
-        <i class="fa-solid fa-grip-vertical text-gray-300 cursor-grab active:cursor-grabbing hover:text-${color} transition-colors"></i>
-        <div class="w-10 h-10 bg-red-50 text-red-500 rounded-lg flex items-center justify-center">
-          <i class="fa-solid fa-file-pdf"></i>
-        </div>
-        <div>
-          <p class="text-sm text-appTextDark font-semibold">${f.name}</p>
-          <p class="text-xs text-appTextMuted">${f.size} &bull; ${f.pages || Math.floor(Math.random()*20+1)} Pages</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button class="p-1.5 text-gray-400 hover:text-${color} hover:bg-${bg} rounded-md transition-colors"><i class="fa-solid fa-eye text-sm"></i></button>
-        <button onclick="removeFile('${tool.id}',${i})" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"><i class="fa-solid fa-xmark text-sm"></i></button>
-      </div>
-    </div>
-  `).join('');
-
+/* FILE LIST TOOL */
+function renderFileListTool(tool,c,color,bgClass,catName,catPage,accept,tf){
+  const fileHtml=tf.map((f,i)=>`
+    <div class="file-item"><div class="file-item-left">
+      <i class="fa-solid fa-grip-vertical file-item-grip"></i>
+      <div class="file-item-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
+      <div class="file-item-info"><h5>${f.name}</h5><p>${f.size} &bull; ${f.pages||Math.floor(Math.random()*20+1)} Pages</p></div>
+    </div><div class="file-item-actions">
+      <button class="file-action-btn view"><i class="fa-solid fa-eye"></i></button>
+      <button class="file-action-btn del" onclick="removeFile('${tool.id}',${i})"><i class="fa-solid fa-xmark"></i></button>
+    </div></div>`).join('');
   return `<div class="page-enter">
-    <div class="mb-8 mt-4 md:mt-6">
-      <div class="flex items-center gap-2 text-${color} mb-2 text-sm">
-        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('${catPage}')"></i>
-        <span class="cursor-pointer hover:underline" onclick="navigate('${catPage}')">Back to ${catName}</span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${tool.name} PDF</h2>
-      <p class="text-appTextMuted text-sm md:text-base mt-1">${tool.desc}.</p>
-    </div>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8 flex flex-col gap-5">
-        <!-- Dropzone -->
-        <div class="glass rounded-2xl p-8 flex flex-col items-center justify-center text-center border-dashed border-2 border-${color}/25 drop-zone cursor-pointer hover:border-${color}/50 transition-colors min-h-[220px]" onclick="document.getElementById('file-input-${tool.id}').click()" ondragover="event.preventDefault();this.classList.add('border-${color}/60')" ondragleave="this.classList.remove('border-${color}/60')" ondrop="handleDrop(event,'${tool.id}','${accept}')">
-          <div class="w-16 h-16 bg-${bg} rounded-full flex items-center justify-center text-${color} mb-4">
-            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
-          </div>
-          <h3 class="text-lg font-semibold text-appTextDark mb-2">Drag and Drop PDFs here</h3>
-          <p class="text-sm text-appTextMuted mb-5">or click to browse your files</p>
-          <button class="px-5 py-2 bg-white rounded-full border border-gray-200 text-sm text-appTextDark hover:bg-gray-50 shadow-sm transition-colors flex items-center gap-2" onclick="event.stopPropagation();document.getElementById('file-input-${tool.id}').click()">
-            <i class="fa-solid fa-plus text-xs"></i> Add More Files
-          </button>
-          <input type="file" id="file-input-${tool.id}" accept="${accept}" multiple class="hidden" onchange="handleFileSelect(this,'${tool.id}')"/>
-        </div>
-        <!-- File List -->
-        <div class="glass rounded-2xl p-5">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xs text-appTextMuted uppercase tracking-wider font-bold">Uploaded Files (${toolFiles.length})</h3>
-            ${toolFiles.length > 0 ? `<button onclick="clearFiles('${tool.id}')" class="text-red-500 text-xs font-semibold hover:underline flex items-center gap-1"><i class="fa-solid fa-trash-can text-[10px]"></i> Clear All</button>` : ''}
-          </div>
-          ${toolFiles.length > 0 ? `<div class="space-y-3">${fileItems}</div>` : `<p class="text-sm text-appTextMuted text-center py-8">No files uploaded yet. Drop PDFs above to get started.</p>`}
-        </div>
-      </div>
-      <!-- Settings Panel -->
-      <div class="lg:col-span-4">
-        <div class="glass rounded-2xl p-6 sticky top-24 flex flex-col gap-6">
-          <div>
-            <h3 class="text-lg font-semibold text-appTextDark mb-1">${tool.name} Settings</h3>
-            <p class="text-xs text-appTextMuted">Configure how your files will be processed.</p>
-          </div>
-          <div class="space-y-5 flex-1">
-            ${tool.id === 'merge' ? `
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Merge Style</label>
-              <div class="grid grid-cols-2 gap-2">
-                <label class="cursor-pointer">
-                  <input type="radio" name="mergeStyle" checked class="peer sr-only"/>
-                  <div class="text-center p-3 rounded-xl border border-gray-200 peer-checked:border-${color} peer-checked:bg-${bg} peer-checked:text-${color} transition-all">
-                    <i class="fa-solid fa-file-lines block mb-1 text-lg"></i>
-                    <span class="text-xs font-semibold">Standard</span>
-                  </div>
-                </label>
-                <label class="cursor-pointer">
-                  <input type="radio" name="mergeStyle" class="peer sr-only"/>
-                  <div class="text-center p-3 rounded-xl border border-gray-200 peer-checked:border-${color} peer-checked:bg-${bg} peer-checked:text-${color} transition-all">
-                    <i class="fa-solid fa-book block mb-1 text-lg"></i>
-                    <span class="text-xs font-semibold">Booklet</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Page Selection</label>
-              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none">
-                <option>All Pages</option><option>Custom Range</option><option>Odd Pages Only</option><option>Even Pages Only</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Filename</label>
-              <div class="flex items-center">
-                <input type="text" value="Merged_Document" class="flex-1 bg-white border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none border-r-0"/>
-                <span class="bg-gray-100 border border-gray-200 border-l-0 rounded-r-xl px-4 py-2.5 text-sm text-appTextMuted">.pdf</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-2">
-              <div><span class="text-sm text-appTextDark block font-medium">Add Table of Contents</span><span class="text-xs text-appTextMuted">Generate from filenames</span></div>
-              <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-            </div>` : `
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Page Range</label>
-              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none">
-                <option>All Pages</option><option>Custom Range</option><option>First Page Only</option><option>Last Page Only</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Filename</label>
-              <div class="flex items-center">
-                <input type="text" value="${tool.name}_Output" class="flex-1 bg-white border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none border-r-0"/>
-                <span class="bg-gray-100 border border-gray-200 border-l-0 rounded-r-xl px-4 py-2.5 text-sm text-appTextMuted">.pdf</span>
-              </div>
-            </div>`}
-          </div>
-          <div class="mt-6 pt-6 border-t border-gray-100">
-            <button onclick="processFiles('${tool.id}','${tool.name}')" class="w-full py-4 rounded-xl text-sm font-bold text-white shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4)">
-              <i class="fa-solid ${tool.icon}"></i> ${tool.name} ${toolFiles.length > 0 ? toolFiles.length + ' File'+(toolFiles.length>1?'s':'') : 'Files'}
-            </button>
-            <p class="text-center text-xs text-appTextMuted mt-3">${toolFiles.length > 0 ? 'Estimated output size: ~' + (toolFiles.reduce((a,f)=>a+f.sizeNum,0)/1024/1024).toFixed(1) + ' MB' : 'Upload files to begin'}</p>
-          </div>
-        </div>
+  <div class="page-header"><div class="breadcrumb"><i class="fa-solid fa-arrow-left" onclick="navigate('${catPage}')"></i><span onclick="navigate('${catPage}')">Back to ${catName}</span></div><h2>${tool.name} PDF</h2><p>${tool.desc}.</p></div>
+  <div class="bento"><div class="bento-main">
+    <div class="g-card" style="padding:32px">
+      <div class="dropzone ${c}" onclick="document.getElementById('fi-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
+        <div class="dropzone-icon ${c}"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+        <h3>Drag and Drop PDFs here</h3><p>or click to browse your files</p>
+        <button class="dropzone-btn" onclick="event.stopPropagation();document.getElementById('fi-${tool.id}').click()"><i class="fa-solid fa-plus"></i> Add More Files</button>
+        <input type="file" id="fi-${tool.id}" accept="${accept}" multiple style="display:none" onchange="handleFileSelect(this,'${tool.id}')"/>
       </div>
     </div>
-  </div>`;
+    <div class="g-card">
+      <div class="file-list-header"><h4>Uploaded Files (${tf.length})</h4>${tf.length?`<button onclick="clearFiles('${tool.id}')"><i class="fa-solid fa-trash-can" style="font-size:10px"></i> Clear All</button>`:''}</div>
+      ${tf.length?fileHtml:'<div class="empty-state">No files uploaded yet. Drop PDFs above to get started.</div>'}
+    </div>
+  </div><div class="bento-side">
+    <div class="g-card settings-panel">
+      <h3>${tool.name} Settings</h3><p>Configure how your files will be processed.</p>
+      <div class="setting-group">
+        ${tool.id==='merge'?`
+        <div><label class="setting-label">Merge Style</label><div class="radio-cards">
+          <label class="radio-card-label"><input type="radio" name="ms" checked/><div class="radio-card"><i class="fa-solid fa-file-lines"></i><span>Standard</span></div></label>
+          <label class="radio-card-label"><input type="radio" name="ms"/><div class="radio-card"><i class="fa-solid fa-book"></i><span>Booklet</span></div></label>
+        </div></div>
+        <div><label class="setting-label">Page Selection</label><select class="form-select"><option>All Pages</option><option>Custom Range</option><option>Odd Pages Only</option><option>Even Pages Only</option></select></div>
+        <div><label class="setting-label">Output Filename</label><div class="form-input-suffix"><input class="form-input" type="text" value="Merged_Document"/><span class="suffix">.pdf</span></div></div>
+        <div class="toggle-row"><div class="toggle-info"><span class="t-title">Add Table of Contents</span><span class="t-desc">Generate from filenames</span></div><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        `:`
+        <div><label class="setting-label">Page Range</label><select class="form-select"><option>All Pages</option><option>Custom Range</option><option>First Page Only</option><option>Last Page Only</option></select></div>
+        <div><label class="setting-label">Output Filename</label><div class="form-input-suffix"><input class="form-input" type="text" value="${tool.name}_Output"/><span class="suffix">.pdf</span></div></div>`}
+      </div>
+      <div class="cta-divider"><button class="cta-btn" onclick="processFiles('${tool.id}','${tool.name}')"><i class="fa-solid ${tool.icon}"></i> ${tool.name} ${tf.length?tf.length+' File'+(tf.length>1?'s':''):'Files'}</button><p class="cta-note">${tf.length?'Estimated output: ~'+(tf.reduce((a,f)=>a+f.sizeNum,0)/1024/1024).toFixed(1)+' MB':'Upload files to begin'}</p></div>
+    </div>
+  </div></div></div>`;
 }
 
-/* Image Editor Tool (Resize, Crop, etc.) */
-function renderImageEditorToolPage(tool, color, bg, catName, catPage, accept, toolFiles) {
-  const hasFile = toolFiles.length > 0;
-  const previewSrc = hasFile ? toolFiles[0].dataUrl : '';
-  const isResize = tool.id === 'resize';
-
+/* IMAGE EDITOR TOOL */
+function renderImageEditorTool(tool,c,color,bgClass,catName,catPage,accept,tf){
+  const hasFile=tf.length>0;
+  const src=hasFile?tf[0].dataUrl:'';
+  const isResize=tool.id==='resize';
   return `<div class="page-enter">
-    <div class="mb-6 mt-4 md:mt-6">
-      <div class="flex items-center gap-2 text-${color} mb-2 text-sm">
-        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('${catPage}')"></i>
-        <span class="cursor-pointer hover:underline" onclick="navigate('${catPage}')">Back to ${catName}</span>
+  <div class="page-header"><div class="breadcrumb"><i class="fa-solid fa-arrow-left" onclick="navigate('${catPage}')"></i><span onclick="navigate('${catPage}')">Back to ${catName}</span></div><h2>${tool.name} Image</h2><p>${tool.desc}.</p></div>
+  <div class="img-editor">
+    <div class="preview-area">
+      <div class="preview-checker"></div>
+      <div class="preview-top">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${hasFile?`<span class="preview-badge default">Original: ${tf[0].width||'---'}</span><span class="preview-badge ${c==='pink'?'accent':'blue-accent'}">Modified</span>`:''}
+        </div>
+        <button class="preview-fit"><i class="fa-solid fa-expand"></i></button>
       </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${tool.name} Image</h2>
-      <p class="text-appTextMuted text-sm md:text-base mt-1">${tool.desc}.</p>
-    </div>
-    <div class="flex flex-col lg:flex-row gap-6 items-start">
-      <!-- Preview Area -->
-      <div class="flex-1 w-full glass rounded-2xl p-5 flex flex-col min-h-[400px] md:min-h-[560px] relative overflow-hidden group">
-        <div class="absolute inset-0 opacity-30" style="background-image:url('data:image/svg+xml,%3Csvg width=&quot;20&quot; height=&quot;20&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Ccircle cx=&quot;2&quot; cy=&quot;2&quot; r=&quot;1.5&quot; fill=&quot;%23e5e7eb&quot; opacity=&quot;0.5&quot;/%3E%3C/svg%3E')"></div>
-        <div class="flex justify-between items-center mb-4 relative z-10">
-          <div class="flex gap-2 flex-wrap">
-            ${hasFile ? `<span class="px-3 py-1 bg-white/80 rounded-full text-xs text-appTextMuted border border-gray-200 backdrop-blur-md">Original: ${toolFiles[0].width || '---'}</span>
-            <span class="px-3 py-1 bg-${bg} rounded-full text-xs text-${color} border border-${color}/20 backdrop-blur-md">Modified</span>` : ''}
-          </div>
-          <button class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-appTextMuted hover:text-${color} transition-colors border border-gray-200 backdrop-blur-md">
-            <i class="fa-solid fa-expand text-xs"></i>
-          </button>
-        </div>
-        <div class="flex-1 w-full flex items-center justify-center relative z-10 border-2 border-dashed border-gray-200 rounded-xl bg-white/30 backdrop-blur-sm overflow-hidden cursor-pointer" onclick="document.getElementById('file-input-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
-          ${hasFile ? `<img src="${previewSrc}" class="max-w-full max-h-full object-contain drop-shadow-xl p-3 transition-transform duration-500 group-hover:scale-[1.02]"/>` :
-          `<div class="text-center p-8">
-            <div class="w-16 h-16 bg-${bg} rounded-full flex items-center justify-center text-${color} mx-auto mb-4">
-              <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
-            </div>
-            <h3 class="text-base font-semibold text-appTextDark mb-1">Drop Image Here</h3>
-            <p class="text-sm text-appTextMuted">or click to browse</p>
-          </div>`}
-          <input type="file" id="file-input-${tool.id}" accept="${accept}" class="hidden" onchange="handleFileSelect(this,'${tool.id}')"/>
-        </div>
-      </div>
-      <!-- Settings Panel -->
-      <div class="w-full lg:w-[360px] flex flex-col gap-5 shrink-0">
-        <!-- Dimensions (for Resize) -->
-        ${isResize ? `<div class="glass rounded-2xl p-6">
-          <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2">
-            <i class="fa-solid ${tool.icon} text-${color} text-sm"></i> Dimensions
-          </h3>
-          <div class="flex flex-col gap-4">
-            <div>
-              <label class="block text-xs text-appTextMuted mb-2 font-medium">Unit</label>
-              <select class="w-full appearance-none bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none cursor-pointer">
-                <option>Pixels (px)</option><option>Percentage (%)</option><option>Inches (in)</option><option>Centimeters (cm)</option>
-              </select>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="flex-1">
-                <label class="block text-xs text-appTextMuted mb-2 font-medium">Width</label>
-                <input type="number" value="${hasFile ? (toolFiles[0].width ? Math.round(toolFiles[0].width*0.5) : 1200) : 1200}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none text-center"/>
-              </div>
-              <div class="flex flex-col items-center justify-end pt-6">
-                <button class="w-8 h-8 rounded-full bg-${bg} text-${color} flex items-center justify-center hover:bg-${color}/20 transition-colors" title="Lock aspect ratio">
-                  <i class="fa-solid fa-link text-xs"></i>
-                </button>
-              </div>
-              <div class="flex-1">
-                <label class="block text-xs text-appTextMuted mb-2 font-medium">Height</label>
-                <input type="number" value="${hasFile ? (toolFiles[0].height ? Math.round(toolFiles[0].height*0.5) : 900) : 900}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none text-center"/>
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs text-appTextMuted mb-2 font-medium">Presets</label>
-              <div class="flex flex-wrap gap-2">
-                <button class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-appTextMuted hover:bg-gray-50 transition-colors">1080p</button>
-                <button class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-appTextMuted hover:bg-gray-50 transition-colors">720p</button>
-                <button class="px-3 py-1.5 rounded-lg border border-${color} text-xs text-${color} bg-${bg} transition-colors">Custom</button>
-                <button class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-appTextMuted hover:bg-gray-50 transition-colors">4K</button>
-              </div>
-            </div>
-          </div>
-        </div>` : ''}
-
-        <!-- Output Settings -->
-        <div class="glass rounded-2xl p-6">
-          <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2">
-            <i class="fa-solid fa-sliders text-${color} text-sm"></i> Output Settings
-          </h3>
-          <div class="flex flex-col gap-5">
-            <div>
-              <label class="block text-xs text-appTextMuted mb-3 font-medium">Format</label>
-              <div class="grid grid-cols-3 gap-2">
-                ${['JPG','PNG','WebP'].map((f,i) => `
-                <label class="cursor-pointer">
-                  <input type="radio" name="format-${tool.id}" ${i===0?'checked':''} class="peer sr-only"/>
-                  <div class="text-center py-2 border border-gray-200 rounded-xl text-xs text-appTextMuted peer-checked:bg-${bg} peer-checked:border-${color} peer-checked:text-${color} transition-all font-medium">${f}</div>
-                </label>`).join('')}
-              </div>
-            </div>
-            <div>
-              <div class="flex justify-between items-center mb-2">
-                <label class="text-xs text-appTextMuted font-medium">Quality</label>
-                <span class="text-xs text-${color} bg-${bg} px-2 py-0.5 rounded font-medium" id="quality-val-${tool.id}">85%</span>
-              </div>
-              <input type="range" min="1" max="100" value="85" class="w-full liquid-slider" oninput="document.getElementById('quality-val-${tool.id}').textContent=this.value+'%'"/>
-              <div class="flex justify-between mt-2"><span class="text-[10px] text-gray-400">Smaller File</span><span class="text-[10px] text-gray-400">Better Quality</span></div>
-            </div>
-            ${!isResize ? `
-            <div>
-              <label class="block text-xs text-appTextMuted mb-2 font-medium">Strength</label>
-              <input type="range" min="0" max="100" value="50" class="w-full liquid-slider"/>
-            </div>` : ''}
-          </div>
-        </div>
-
-        <!-- Action Button -->
-        <button onclick="${hasFile ? `processFiles('${tool.id}','${tool.name}')` : `document.getElementById('file-input-${tool.id}').click()`}" class="w-full py-4 rounded-xl text-sm font-bold text-white shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4)">
-          <i class="fa-solid ${hasFile ? 'fa-download' : 'fa-arrow-up-from-bracket'}"></i> ${hasFile ? `Download ${tool.name}d Image` : 'Upload Image First'}
-        </button>
-        <p class="text-center text-xs text-appTextMuted">${hasFile ? 'Estimated size: ~' + Math.round((toolFiles[0].sizeNum||500000)*0.4/1024) + ' KB' : 'Upload an image to get started'}</p>
+      <div class="preview-canvas" onclick="document.getElementById('fi-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
+        ${hasFile?`<img src="${src}"/>`:`<div class="preview-empty"><div class="preview-empty-icon ${c}"><i class="fa-solid fa-cloud-arrow-up"></i></div><h4>Drop Image Here</h4><p>or click to browse</p></div>`}
+        <input type="file" id="fi-${tool.id}" accept="${accept}" style="display:none" onchange="handleFileSelect(this,'${tool.id}')"/>
       </div>
     </div>
-  </div>`;
+    <div class="img-editor-side">
+      ${isResize?`<div class="g-card">
+        <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fa-solid ${tool.icon}" style="color:${color};font-size:14px"></i> Dimensions</h3>
+        <div class="setting-group">
+          <div><label class="setting-label-sm">Unit</label><select class="form-select"><option>Pixels (px)</option><option>Percentage (%)</option><option>Inches (in)</option><option>Centimeters (cm)</option></select></div>
+          <div class="dim-row"><div style="flex:1"><label class="setting-label-sm">Width</label><input class="form-input" type="number" value="${hasFile&&tf[0].width?Math.round(parseInt(tf[0].width)*0.5):1200}" style="text-align:center"/></div><button class="dim-link" title="Lock aspect ratio"><i class="fa-solid fa-link"></i></button><div style="flex:1"><label class="setting-label-sm">Height</label><input class="form-input" type="number" value="${hasFile&&tf[0].height?Math.round(parseInt(tf[0].height)*0.5):900}" style="text-align:center"/></div></div>
+          <div><label class="setting-label-sm">Presets</label><div class="preset-chips"><button class="preset-chip">1080p</button><button class="preset-chip">720p</button><button class="preset-chip active">Custom</button><button class="preset-chip">4K</button></div></div>
+        </div>
+      </div>`:''}
+      <div class="g-card">
+        <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-sliders" style="color:${color};font-size:14px"></i> Output Settings</h3>
+        <div class="setting-group">
+          <div><label class="setting-label-sm">Format</label><div class="format-pills">${['JPG','PNG','WebP'].map((f,i)=>`<label class="format-pill-label"><input type="radio" name="fmt-${tool.id}" ${i===0?'checked':''}/><div class="format-pill">${f}</div></label>`).join('')}</div></div>
+          <div class="slider-wrap"><div class="slider-header"><label class="setting-label-sm" style="margin:0">Quality</label><span class="slider-val" id="qv-${tool.id}">85%</span></div><input type="range" min="1" max="100" value="85" oninput="document.getElementById('qv-${tool.id}').textContent=this.value+'%'"/><div class="slider-range"><span>Smaller File</span><span>Better Quality</span></div></div>
+          ${!isResize?`<div class="slider-wrap"><div class="slider-header"><label class="setting-label-sm" style="margin:0">Strength</label><span class="slider-val">50%</span></div><input type="range" min="0" max="100" value="50"/></div>`:''}
+        </div>
+      </div>
+      <button class="cta-btn" onclick="${hasFile?`processFiles('${tool.id}','${tool.name}')`:`document.getElementById('fi-${tool.id}').click()`}"><i class="fa-solid ${hasFile?'fa-download':'fa-arrow-up-from-bracket'}"></i> ${hasFile?'Download '+tool.name+'d Image':'Upload Image First'}</button>
+      <p class="cta-note">${hasFile?'Estimated size: ~'+Math.round((tf[0].sizeNum||500000)*0.4/1024)+' KB':'Upload an image to get started'}</p>
+    </div>
+  </div></div>`;
 }
 
-/* Simple Tool Page (Compress, Convert, etc.) */
-function renderSimpleToolPage(tool, color, bg, catName, catPage, accept, toolFiles) {
-  const hasFile = toolFiles.length > 0;
+/* SIMPLE TOOL */
+function renderSimpleTool(tool,c,color,bgClass,catName,catPage,accept,tf){
+  const hasFile=tf.length>0;
   return `<div class="page-enter">
-    <div class="mb-8 mt-4 md:mt-6">
-      <div class="flex items-center gap-2 text-${color} mb-2 text-sm">
-        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('${catPage}')"></i>
-        <span class="cursor-pointer hover:underline" onclick="navigate('${catPage}')">Back to ${catName}</span>
-      </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${tool.name}</h2>
-      <p class="text-appTextMuted text-sm md:text-base mt-1">${tool.desc}.</p>
-    </div>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8 flex flex-col gap-5">
-        <div class="glass rounded-2xl p-8 flex flex-col items-center justify-center text-center border-dashed border-2 border-${color}/25 drop-zone cursor-pointer hover:border-${color}/50 transition-colors min-h-[280px]" onclick="document.getElementById('file-input-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
-          <div class="w-20 h-20 bg-${bg} rounded-full flex items-center justify-center text-${color} mb-5 float-anim">
-            <i class="fa-solid ${tool.icon} text-3xl"></i>
-          </div>
-          <h3 class="text-xl font-semibold text-appTextDark mb-2">${hasFile ? toolFiles[0].name : 'Drag and Drop Files Here'}</h3>
-          <p class="text-sm text-appTextMuted mb-5">${hasFile ? (toolFiles[0].size + ' — Tap to replace') : 'or click to browse'}</p>
-          <button class="px-5 py-2.5 bg-white rounded-full border border-gray-200 text-sm text-appTextDark hover:bg-gray-50 shadow-sm transition-colors flex items-center gap-2" onclick="event.stopPropagation();document.getElementById('file-input-${tool.id}').click()">
-            <i class="fa-solid fa-plus text-xs"></i> ${hasFile ? 'Replace File' : 'Choose File'}
-          </button>
-          <input type="file" id="file-input-${tool.id}" accept="${accept}" class="hidden" onchange="handleFileSelect(this,'${tool.id}')"/>
-        </div>
-        ${hasFile ? `<div class="glass rounded-2xl p-5">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-${bg} text-${color} rounded-lg flex items-center justify-center"><i class="fa-solid ${tool.cat==='image'?'fa-image':'fa-file-pdf'}"></i></div>
-              <div><p class="text-sm font-semibold text-appTextDark">${toolFiles[0].name}</p><p class="text-xs text-appTextMuted">${toolFiles[0].size}</p></div>
-            </div>
-            <button onclick="removeFile('${tool.id}',0)" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><i class="fa-solid fa-xmark"></i></button>
-          </div>
-        </div>` : ''}
-      </div>
-      <div class="lg:col-span-4">
-        <div class="glass rounded-2xl p-6 sticky top-24 flex flex-col gap-6">
-          <div>
-            <h3 class="text-lg font-semibold text-appTextDark mb-1">Settings</h3>
-            <p class="text-xs text-appTextMuted">Configure output options.</p>
-          </div>
-          <div class="space-y-5 flex-1">
-            ${tool.id.includes('compress') ? `
-            <div>
-              <div class="flex justify-between items-center mb-2">
-                <label class="text-sm text-appTextDark font-medium">Compression Level</label>
-                <span class="text-xs text-${color} bg-${bg} px-2 py-0.5 rounded font-medium" id="compress-val">Medium</span>
-              </div>
-              <input type="range" min="1" max="3" value="2" class="w-full liquid-slider" oninput="document.getElementById('compress-val').textContent=['Low','Medium','High'][this.value-1]"/>
-            </div>` : ''}
-            ${tool.id === 'protect' ? `
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Password</label>
-              <input type="password" placeholder="Enter password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none"/>
-            </div>
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Confirm Password</label>
-              <input type="password" placeholder="Confirm password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none"/>
-            </div>` : ''}
-            ${tool.id === 'to-word' || tool.id === 'to-jpg' ? `
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Format</label>
-              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none">
-                ${tool.id === 'to-word' ? '<option>DOCX</option><option>DOC</option><option>RTF</option><option>TXT</option>' : '<option>JPG</option><option>PNG</option><option>WebP</option>'}
-              </select>
-            </div>` : ''}
-            ${tool.id === 'watermark' ? `
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Watermark Text</label>
-              <input type="text" placeholder="e.g., CONFIDENTIAL" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none"/>
-            </div>
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Position</label>
-              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none">
-                <option>Center</option><option>Bottom Right</option><option>Bottom Left</option><option>Tiled</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Opacity</label>
-              <input type="range" min="10" max="100" value="30" class="w-full liquid-slider"/>
-            </div>` : ''}
-            <div>
-              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Filename</label>
-              <div class="flex items-center">
-                <input type="text" value="${tool.name}_Output" class="flex-1 bg-white border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none border-r-0"/>
-                <span class="bg-gray-100 border border-gray-200 border-l-0 rounded-r-xl px-4 py-2.5 text-sm text-appTextMuted">.${tool.cat==='image'?'jpg':'pdf'}</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-6 pt-6 border-t border-gray-100">
-            <button onclick="${hasFile ? `processFiles('${tool.id}','${tool.name}')` : `document.getElementById('file-input-${tool.id}').click()`}" class="w-full py-4 rounded-xl text-sm font-bold text-white shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4)">
-              <i class="fa-solid ${hasFile ? 'fa-download' : 'fa-arrow-up-from-bracket'}"></i> ${hasFile ? `Process & Download` : 'Upload File First'}
-            </button>
-            <p class="text-center text-xs text-appTextMuted mt-3">${hasFile ? 'Ready to process' : 'Upload a file to begin'}</p>
-          </div>
-        </div>
+  <div class="page-header"><div class="breadcrumb"><i class="fa-solid fa-arrow-left" onclick="navigate('${catPage}')"></i><span onclick="navigate('${catPage}')">Back to ${catName}</span></div><h2>${tool.name}</h2><p>${tool.desc}.</p></div>
+  <div class="bento"><div class="bento-main">
+    <div class="g-card" style="padding:32px">
+      <div class="dropzone ${c}" onclick="document.getElementById('fi-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
+        <div class="dropzone-icon ${c} float-anim"><i class="fa-solid ${tool.icon}"></i></div>
+        <h3>${hasFile?tf[0].name:'Drag and Drop Files Here'}</h3><p>${hasFile?(tf[0].size+' — Tap to replace'):'or click to browse'}</p>
+        <button class="dropzone-btn" onclick="event.stopPropagation();document.getElementById('fi-${tool.id}').click()"><i class="fa-solid fa-plus"></i> ${hasFile?'Replace File':'Choose File'}</button>
+        <input type="file" id="fi-${tool.id}" accept="${accept}" style="display:none" onchange="handleFileSelect(this,'${tool.id}')"/>
       </div>
     </div>
-  </div>`;
-}
-
-/* =========================================
-   FILES PAGE
-   ========================================= */
-function renderFilesPage() {
-  const allFiles = Object.entries(uploadedFiles).flatMap(([toolId, files]) => files.map(f => ({...f, toolId})));
-  return `<div class="page-enter mt-4 md:mt-6">
-    <h2 class="text-2xl md:text-3xl font-bold text-appTextDark mb-2 tracking-tight">My Files</h2>
-    <p class="text-sm md:text-base text-appTextMuted mb-6">All your recently uploaded files in one place.</p>
-    ${allFiles.length > 0 ? `
-    <div class="space-y-3">
-      ${allFiles.map((f,i) => `
-      <div class="glass rounded-xl p-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg ${f.toolId.includes('pdf') || pdfTools.some(t=>t.id===f.toolId) ? 'bg-blue-50 text-blue-500' : 'bg-pink-50 text-appAccent'} flex items-center justify-center">
-            <i class="fa-solid ${f.toolId.includes('pdf') || pdfTools.some(t=>t.id===f.toolId) ? 'fa-file-pdf' : 'fa-image'}"></i>
-          </div>
-          <div>
-            <p class="text-sm font-semibold text-appTextDark">${f.name}</p>
-            <p class="text-xs text-appTextMuted">${f.size} &bull; ${allTools.find(t=>t.id===f.toolId)?.name || f.toolId}</p>
-          </div>
-        </div>
-        <button onclick="removeFile('${f.toolId}',${uploadedFiles[f.toolId].indexOf(f)});navigate('files')" class="text-gray-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can text-sm"></i></button>
-      </div>`).join('')}
-    </div>` : `
-    <div class="glass rounded-2xl p-12 text-center">
-      <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fa-solid fa-folder-open text-3xl text-gray-300"></i>
+    ${hasFile?`<div class="g-card"><div class="file-item" style="margin:0"><div class="file-item-left"><div class="file-item-icon ${tool.cat==='image'?'img':'pdf'}"><i class="fa-solid ${tool.cat==='image'?'fa-image':'fa-file-pdf'}"></i></div><div class="file-item-info"><h5>${tf[0].name}</h5><p>${tf[0].size}</p></div></div><button class="file-action-btn del" onclick="removeFile('${tool.id}',0)" style="opacity:1"><i class="fa-solid fa-xmark"></i></button></div></div>`:''}
+  </div><div class="bento-side">
+    <div class="g-card settings-panel">
+      <h3>Settings</h3><p>Configure output options.</p>
+      <div class="setting-group">
+        ${tool.id.includes('compress')?`<div class="slider-wrap"><div class="slider-header"><label class="setting-label" style="margin:0">Compression Level</label><span class="slider-val" id="cv">Medium</span></div><input type="range" min="1" max="3" value="2" oninput="document.getElementById('cv').textContent=['Low','Medium','High'][this.value-1]"/></div>`:''}
+        ${tool.id==='protect'?`<div><label class="setting-label">Password</label><input class="form-input" type="password" placeholder="Enter password"/></div><div><label class="setting-label">Confirm Password</label><input class="form-input" type="password" placeholder="Confirm password"/></div>`:''}
+        ${tool.id==='to-word'||tool.id==='to-jpg'?`<div><label class="setting-label">Output Format</label><select class="form-select">${tool.id==='to-word'?'<option>DOCX</option><option>DOC</option><option>RTF</option><option>TXT</option>':'<option>JPG</option><option>PNG</option><option>WebP</option>'}</select></div>`:''}
+        ${tool.id==='watermark'?`<div><label class="setting-label">Watermark Text</label><input class="form-input" type="text" placeholder="e.g., CONFIDENTIAL"/></div><div><label class="setting-label">Position</label><select class="form-select"><option>Center</option><option>Bottom Right</option><option>Bottom Left</option><option>Tiled</option></select></div><div class="slider-wrap"><div class="slider-header"><label class="setting-label" style="margin:0">Opacity</label><span class="slider-val">30%</span></div><input type="range" min="10" max="100" value="30"/></div>`:''}
+        <div><label class="setting-label">Output Filename</label><div class="form-input-suffix"><input class="form-input" type="text" value="${tool.name}_Output"/><span class="suffix">.${tool.cat==='image'?'jpg':'pdf'}</span></div></div>
       </div>
-      <h3 class="text-lg font-semibold text-appTextDark mb-2">No files yet</h3>
-      <p class="text-sm text-appTextMuted mb-5">Upload files using any tool to see them here.</p>
-      <button onclick="navigate('home')" class="px-6 py-2.5 bg-appAccent text-white rounded-full text-sm font-bold hover:bg-appAccentHover transition-colors">Browse Tools</button>
-    </div>`}
-  </div>`;
-}
-
-/* =========================================
-   HISTORY PAGE
-   ========================================= */
-function renderHistoryPage() {
-  return `<div class="page-enter mt-4 md:mt-6">
-    <h2 class="text-2xl md:text-3xl font-bold text-appTextDark mb-2 tracking-tight">History</h2>
-    <p class="text-sm md:text-base text-appTextMuted mb-6">Track all your file processing activities.</p>
-    <div class="glass rounded-2xl p-12 text-center">
-      <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fa-solid fa-clock-rotate-left text-3xl text-gray-300"></i>
-      </div>
-      <h3 class="text-lg font-semibold text-appTextDark mb-2">No history yet</h3>
-      <p class="text-sm text-appTextMuted mb-5">Process files to build your activity history.</p>
-      <button onclick="navigate('home')" class="px-6 py-2.5 bg-appAccent text-white rounded-full text-sm font-bold hover:bg-appAccentHover transition-colors">Get Started</button>
+      <div class="cta-divider"><button class="cta-btn" onclick="${hasFile?`processFiles('${tool.id}','${tool.name}')`:`document.getElementById('fi-${tool.id}').click()`}"><i class="fa-solid ${hasFile?'fa-download':'fa-arrow-up-from-bracket'}"></i> ${hasFile?'Process & Download':'Upload File First'}</button><p class="cta-note">${hasFile?'Ready to process':'Upload a file to begin'}</p></div>
     </div>
-  </div>`;
+  </div></div></div>`;
 }
 
-/* =========================================
-   SETTINGS PAGE
-   ========================================= */
-function renderSettingsPage() {
-  return `<div class="page-enter mt-4 md:mt-6">
-    <h2 class="text-2xl md:text-3xl font-bold text-appTextDark mb-2 tracking-tight">Settings</h2>
-    <p class="text-sm md:text-base text-appTextMuted mb-8">Customize your Omni Tools experience.</p>
-    <div class="max-w-2xl space-y-4">
-      <div class="glass rounded-2xl p-6">
-        <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2"><i class="fa-solid fa-palette text-appAccent text-sm"></i> Appearance</h3>
-        <div class="flex items-center justify-between py-3 border-b border-gray-100">
-          <div><span class="text-sm text-appTextDark block font-medium">Dark Mode</span><span class="text-xs text-appTextMuted">Switch to dark theme</span></div>
-          <div class="toggle-track" onclick="toggleDarkMode();this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-        </div>
-        <div class="flex items-center justify-between py-3">
-          <div><span class="text-sm text-appTextDark block font-medium">Animations</span><span class="text-xs text-appTextMuted">Enable UI animations</span></div>
-          <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2"><i class="fa-solid fa-folder text-appAccent text-sm"></i> Storage</h3>
-        <div class="mb-4">
-          <div class="flex justify-between text-sm mb-2"><span class="text-appTextDark font-medium">Used Space</span><span class="text-appTextMuted">0 MB / 500 MB</span></div>
-          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-appAccent to-[#FF8E53] rounded-full" style="width:0%"></div></div>
-        </div>
-        <button onclick="showToast('Cache cleared successfully','success')" class="text-sm text-appAccent font-medium hover:underline">Clear Cache</button>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-appAccent text-sm"></i> Privacy</h3>
-        <div class="flex items-center justify-between py-3 border-b border-gray-100">
-          <div><span class="text-sm text-appTextDark block font-medium">Process Locally</span><span class="text-xs text-appTextMuted">All files stay in your browser</span></div>
-          <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-        </div>
-        <div class="flex items-center justify-between py-3">
-          <div><span class="text-sm text-appTextDark block font-medium">Auto-delete Files</span><span class="text-xs text-appTextMuted">Remove files after processing</span></div>
-          <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6">
-        <h3 class="text-base font-semibold text-appTextDark mb-3 flex items-center gap-2"><i class="fa-solid fa-circle-info text-appAccent text-sm"></i> About</h3>
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between"><span class="text-appTextMuted">Version</span><span class="text-appTextDark font-medium">2.0.1</span></div>
-          <div class="flex justify-between"><span class="text-appTextMuted">Engine</span><span class="text-appTextDark font-medium">Browser Native</span></div>
-          <div class="flex justify-between"><span class="text-appTextMuted">License</span><span class="text-appTextDark font-medium">Pro</span></div>
-        </div>
-      </div>
+/* ===== FILES PAGE ===== */
+function renderFilesPage(){
+  const all=Object.entries(uploadedFiles).flatMap(([tid,files])=>files.map(f=>({...f,tid})));
+  return `<div class="page-enter"><div class="page-header"><h2>My Files</h2><p>All your recently uploaded files in one place.</p></div>
+  ${all.length?`<div class="g-card" style="padding:8px">${all.map(f=>`<div class="file-row"><div class="file-row-left"><div class="file-row-icon ${pdfTools.some(t=>t.id===f.tid)?'pdf':'img'}"><i class="fa-solid ${pdfTools.some(t=>t.id===f.tid)?'fa-file-pdf':'fa-image'}"></i></div><div class="file-row-info"><h5>${f.name}</h5><p>${f.size} &bull; ${allTools.find(t=>t.id===f.tid)?.name||f.tid}</p></div></div><button class="file-row-del" onclick="removeFile('${f.tid}',${uploadedFiles[f.tid].indexOf(f)});navigate('files')"><i class="fa-solid fa-trash-can"></i></button></div>`).join('')}</div>`:
+  `<div class="g-card empty-page"><div class="empty-page-icon"><i class="fa-solid fa-folder-open"></i></div><h3>No files yet</h3><p>Upload files using any tool to see them here.</p><button class="empty-page-btn" onclick="navigate('home')">Browse Tools</button></div>`}</div>`;
+}
+
+/* ===== HISTORY PAGE ===== */
+function renderHistoryPage(){
+  return `<div class="page-enter"><div class="page-header"><h2>History</h2><p>Track all your file processing activities.</p></div>
+  <div class="g-card empty-page"><div class="empty-page-icon"><i class="fa-solid fa-clock-rotate-left"></i></div><h3>No history yet</h3><p>Process files to build your activity history.</p><button class="empty-page-btn" onclick="navigate('home')">Get Started</button></div></div>`;
+}
+
+/* ===== SETTINGS PAGE ===== */
+function renderSettingsPage(){
+  return `<div class="page-enter"><div class="page-header"><h2>Settings</h2><p>Customize your Omni Tools experience.</p></div>
+  <div class="settings-page">
+    <div class="g-card settings-card"><h3><i class="fa-solid fa-palette"></i> Appearance</h3>
+      <div class="settings-row"><div class="settings-row-info"><span class="sr-title">Dark Mode</span><span class="sr-desc">Switch to dark theme</span></div><div class="toggle" onclick="showToast('Dark mode coming soon','info');this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+      <div class="settings-row"><div class="settings-row-info"><span class="sr-title">Animations</span><span class="sr-desc">Enable UI animations</span></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
     </div>
-  </div>`;
+    <div class="g-card settings-card"><h3><i class="fa-solid fa-folder"></i> Storage</h3>
+      <div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px"><span style="color:var(--text);font-weight:500">Used Space</span><span style="color:var(--text-muted)">0 MB / 500 MB</span></div><div class="storage-bar"><div class="storage-bar-fill" style="width:0%"></div></div></div>
+      <span class="settings-link" onclick="showToast('Cache cleared','success')">Clear Cache</span>
+    </div>
+    <div class="g-card settings-card"><h3><i class="fa-solid fa-shield-halved"></i> Privacy</h3>
+      <div class="settings-row"><div class="settings-row-info"><span class="sr-title">Process Locally</span><span class="sr-desc">All files stay in your browser</span></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+      <div class="settings-row"><div class="settings-row-info"><span class="sr-title">Auto-delete Files</span><span class="sr-desc">Remove files after processing</span></div><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+    </div>
+    <div class="g-card settings-card"><h3><i class="fa-solid fa-circle-info"></i> About</h3>
+      <div class="about-row"><span>Version</span><span>2.0.1</span></div>
+      <div class="about-row"><span>Engine</span><span>Browser Native</span></div>
+      <div class="about-row"><span>License</span><span>Pro</span></div>
+    </div>
+  </div></div>`;
 }
 
-/* =========================================
-   FILE HANDLING
-   ========================================= */
-function handleFileSelect(input, toolId) {
-  const files = Array.from(input.files);
-  if (!files.length) return;
-  if (!uploadedFiles[toolId]) uploadedFiles[toolId] = [];
-  files.forEach(f => {
-    const fileObj = {name: f.name, size: formatSize(f.size), sizeNum: f.size};
-    if (f.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = new Image();
-        img.onload = () => {
-          fileObj.dataUrl = e.target.result;
-          fileObj.width = img.naturalWidth + ' x ' + img.naturalHeight;
-          uploadedFiles[toolId].push(fileObj);
-          renderPage(currentPage);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(f);
-    } else {
-      fileObj.pages = Math.floor(Math.random() * 20 + 1);
-      uploadedFiles[toolId].push(fileObj);
-      renderPage(currentPage);
-    }
+/* ===== FILE HANDLING ===== */
+function handleFileSelect(input,tid){
+  const files=Array.from(input.files);if(!files.length)return;
+  if(!uploadedFiles[tid])uploadedFiles[tid]=[];
+  files.forEach(f=>{
+    const o={name:f.name,size:fmtSize(f.size),sizeNum:f.size};
+    if(f.type.startsWith('image/')){
+      const r=new FileReader();
+      r.onload=e=>{const img=new Image();img.onload=()=>{o.dataUrl=e.target.result;o.width=img.naturalWidth+' x '+img.naturalHeight;uploadedFiles[tid].push(o);renderPage(currentPage)};img.src=e.target.result};
+      r.readAsDataURL(f);
+    }else{o.pages=Math.floor(Math.random()*20+1);uploadedFiles[tid].push(o);renderPage(currentPage)}
   });
-  input.value = '';
-  showToast(`${files.length} file${files.length>1?'s':''} uploaded`, 'success');
+  input.value='';showToast(files.length+' file'+(files.length>1?'s':'')+' uploaded','success');
+}
+function handleDrop(e,tid,accept){
+  e.preventDefault();const files=Array.from(e.dataTransfer.files).filter(f=>accept==='image/*'?f.type.startsWith('image/'):f.name.endsWith('.pdf'));
+  if(!files.length){showToast('Unsupported file type','error');return}
+  const dt=new DataTransfer();files.forEach(f=>dt.items.add(f));
+  const inp=document.getElementById('fi-'+tid);if(inp){inp.files=dt.files;handleFileSelect(inp,tid)}
+}
+function removeFile(tid,i){if(uploadedFiles[tid]){uploadedFiles[tid].splice(i,1);renderPage(currentPage);showToast('File removed','info')}}
+function clearFiles(tid){uploadedFiles[tid]=[];renderPage(currentPage);showToast('All files cleared','info')}
+function processFiles(tid,name){showToast(name+' completed successfully!','success')}
+function fmtSize(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB'}
+
+/* ===== SEARCH ===== */
+function handleSearch(v){v.length?openSearch(v):closeSearch()}
+function openSearch(q){const o=document.getElementById('search-overlay');o.classList.add('open');const i=document.getElementById('search-overlay-input');i.value=q||'';i.focus();handleOverlaySearch(q||'')}
+function closeSearch(){document.getElementById('search-overlay').classList.remove('open');document.getElementById('search-input').value=''}
+function handleOverlaySearch(q){
+  const c=document.getElementById('search-results');
+  if(!q.trim()){c.innerHTML='<div class="search-empty">Start typing to search tools...</div>';return}
+  const r=allTools.filter(t=>t.name.toLowerCase().includes(q.toLowerCase())||t.desc.toLowerCase().includes(q.toLowerCase()));
+  if(!r.length){c.innerHTML='<div class="search-empty">No tools found for "'+q+'"</div>';return}
+  c.innerHTML=r.map(t=>`<button class="search-result-item" onclick="navigate('tool/${t.id}');closeSearch()"><div class="search-result-icon ${t.cat==='image'?'pink':'blue'}"><i class="fa-solid ${t.icon}"></i></div><div class="search-result-info"><h5>${t.name}</h5><p>${t.desc} &bull; ${t.cat==='image'?'Image Tool':'PDF Tool'}</p></div><i class="fa-solid fa-arrow-right search-result-arrow"></i></button>`).join('');
 }
 
-function handleDrop(event, toolId, accept) {
-  event.preventDefault();
-  event.currentTarget.classList.remove('border-appAccent/60','border-pdfBlue/60');
-  const files = Array.from(event.dataTransfer.files).filter(f => {
-    if (accept === 'image/*') return f.type.startsWith('image/');
-    return f.name.endsWith('.pdf');
-  });
-  if (!files.length) { showToast('Unsupported file type', 'error'); return; }
-  const dt = new DataTransfer();
-  files.forEach(f => dt.items.add(f));
-  const input = document.getElementById('file-input-' + toolId);
-  if (input) { input.files = dt.files; handleFileSelect(input, toolId); }
+/* ===== TOAST ===== */
+function showToast(msg,type='info'){
+  const c=document.getElementById('toast-container');
+  const icons={success:'fa-circle-check',error:'fa-circle-xmark',info:'fa-circle-info'};
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<i class="fa-solid ${icons[type]||icons.info} ${type}"></i><span>${msg}</span><button class="toast-close" onclick="this.parentElement.classList.add('exit');setTimeout(()=>this.parentElement.remove(),300)"><i class="fa-solid fa-xmark"></i></button>`;
+  c.appendChild(t);setTimeout(()=>{t.classList.add('exit');setTimeout(()=>t.remove(),300)},3500);
 }
 
-function removeFile(toolId, index) {
-  if (uploadedFiles[toolId]) {
-    uploadedFiles[toolId].splice(index, 1);
-    renderPage(currentPage);
-    showToast('File removed', 'info');
-  }
-}
+/* ===== MOBILE MENU ===== */
+function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('open')}
 
-function clearFiles(toolId) {
-  uploadedFiles[toolId] = [];
-  renderPage(currentPage);
-  showToast('All files cleared', 'info');
-}
-
-function processFiles(toolId, toolName) {
-  showToast(`${toolName} completed successfully!`, 'success');
-}
-
-function formatSize(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-  return (bytes / 1048576).toFixed(1) + ' MB';
-}
-
-/* =========================================
-   SEARCH
-   ========================================= */
-function handleSearch(value) {
-  if (value.length > 0) {
-    openSearch(value);
-  } else {
-    closeSearch();
-  }
-}
-
-function openSearch(query) {
-  const overlay = document.getElementById('search-overlay');
-  const input = document.getElementById('search-overlay-input');
-  overlay.classList.remove('hidden');
-  input.value = query || '';
-  input.focus();
-  handleOverlaySearch(query || '');
-}
-
-function closeSearch() {
-  document.getElementById('search-overlay').classList.add('hidden');
-  document.getElementById('search-input').value = '';
-}
-
-function handleOverlaySearch(query) {
-  const container = document.getElementById('search-results');
-  if (!query.trim()) { container.innerHTML = '<p class="text-sm text-appTextMuted text-center py-8">Start typing to search tools...</p>'; return; }
-  const results = allTools.filter(t => t.name.toLowerCase().includes(query.toLowerCase()) || t.desc.toLowerCase().includes(query.toLowerCase()) || t.cat.includes(query.toLowerCase()));
-  if (!results.length) { container.innerHTML = '<p class="text-sm text-appTextMuted text-center py-8">No tools found for "' + query + '"</p>'; return; }
-  container.innerHTML = results.map(t => `
-    <button onclick="navigate('tool/${t.id}');closeSearch()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-left">
-      <div class="w-9 h-9 rounded-lg ${t.cat==='image' ? 'bg-iconBgPink text-appAccent' : 'bg-pdfBlueBg text-pdfBlue'} flex items-center justify-center shrink-0">
-        <i class="fa-solid ${t.icon} text-sm"></i>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-appTextDark">${t.name}</p>
-        <p class="text-xs text-appTextMuted truncate">${t.desc} &bull; ${t.cat === 'image' ? 'Image Tool' : 'PDF Tool'}</p>
-      </div>
-      <i class="fa-solid fa-arrow-right text-xs text-gray-300"></i>
-    </button>
-  `).join('');
-}
-
-/* =========================================
-   TOAST NOTIFICATIONS
-   ========================================= */
-function showToast(message, type = 'info') {
-  const container = document.getElementById('toast-container');
-  const icons = {success: 'fa-circle-check text-emerald-500', error: 'fa-circle-xmark text-red-500', info: 'fa-circle-info text-blue-500'};
-  const toast = document.createElement('div');
-  toast.className = 'toast-enter flex items-center gap-3 px-5 py-3.5 bg-white rounded-xl shadow-lg border border-gray-100';
-  toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span class="text-sm text-appTextDark font-medium flex-1">${message}</span><button onclick="this.parentElement.classList.add('toast-exit');setTimeout(()=>this.parentElement.remove(),300)" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xs"></i></button>`;
-  container.appendChild(toast);
-  setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3500);
-}
-
-/* =========================================
-   MOBILE MENU
-   ========================================= */
-function toggleMobileMenu() {
-  const menu = document.getElementById('mobile-menu');
-  menu.classList.toggle('hidden');
-}
-
-/* =========================================
-   DARK MODE (toggle visual only)
-   ========================================= */
-function toggleDarkMode() {
-  showToast('Dark mode coming soon in next update', 'info');
-}
-
-/* =========================================
-   KEYBOARD SHORTCUTS
-   ========================================= */
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    openSearch();
-  }
-  if (e.key === 'Escape') {
-    closeSearch();
-    const menu = document.getElementById('mobile-menu');
-    if (!menu.classList.contains('hidden')) toggleMobileMenu();
-  }
+/* ===== KEYBOARD ===== */
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openSearch()}
+  if(e.key==='Escape'){closeSearch();const m=document.getElementById('mobile-menu');if(m.classList.contains('open'))toggleMobileMenu()}
 });
 
-/* =========================================
-   INIT
-   ========================================= */
-navigate('home');
+/* ===== INIT ===== */
+initNav();navigate('home');
 </script>
 </body>
 </html>
