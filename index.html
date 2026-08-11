@@ -1,1 +1,1080 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omni Tools - Premium Utility Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:'class',theme:{extend:{colors:{appBg:'#f9fafb',appCard:'#ffffff',appAccent:'#FF4D67',appAccentHover:'#e63e55',appTextMuted:'#6b7280',appTextDark:'#111827',iconBgPink:'rgba(255,77,103,0.1)',iconBgBlue:'rgba(10,132,255,0.1)',iconBgOrange:'rgba(255,159,10,0.1)',iconBgPurple:'rgba(139,92,246,0.1)',pdfBlue:'#0A84FF',pdfBlueBg:'rgba(10,132,255,0.1)'},fontFamily:{sans:['Inter','-apple-system','BlinkMacSystemFont','sans-serif']},borderRadius:{'4xl':'2rem','5xl':'2.5rem'},boxShadow:{'card':'0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -1px rgba(0,0,0,0.03)','card-hover':'0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)','glow':'0 10px 30px rgba(255,77,103,0.2)'}}}}
+</script>
+<style>
+*{box-sizing:border-box}
+body{background:#f9fafb;color:#111827;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.hide-scrollbar::-webkit-scrollbar{display:none}
+.hide-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);box-shadow:0 4px 6px -1px rgba(0,0,0,0.05),0 2px 4px -1px rgba(0,0,0,0.03);transition:all .3s ease}
+.glass:hover{background:rgba(255,255,255,0.92);backdrop-filter:blur(30px);transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(255,77,103,0.08),0 4px 6px -2px rgba(0,0,0,0.04);border-color:rgba(255,77,103,0.18)}
+.sidebar-glass{background:rgba(255,255,255,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-right:1px solid rgba(0,0,0,0.06)}
+.search-glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.08);box-shadow:inset 0 2px 4px 0 rgba(0,0,0,0.02);transition:all .3s}
+.search-glass:focus-within{background:#fff;border-color:#FF4D67;box-shadow:0 0 0 3px rgba(255,77,103,0.1)}
+.drop-zone{background:repeating-linear-gradient(-45deg,transparent,transparent 10px,rgba(255,77,103,0.025) 10px,rgba(255,77,103,0.025) 20px)}
+.page-enter{animation:pageIn .35s ease forwards}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse-ring{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.3);opacity:0}}
+.float-anim{animation:float 4s ease-in-out infinite}
+.toggle-track{width:44px;height:24px;border-radius:12px;background:#d1d5db;position:relative;cursor:pointer;transition:background .3s}
+.toggle-track.active{background:#FF4D67}
+.toggle-knob{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .3s;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.toggle-track.active .toggle-knob{transform:translateX(20px)}
+.liquid-slider{-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#e5e7eb;outline:none}
+.liquid-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#FF4D67;cursor:pointer;box-shadow:0 2px 8px rgba(255,77,103,0.35);transition:transform .2s}
+.liquid-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.liquid-slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#FF4D67;cursor:pointer;border:none;box-shadow:0 2px 8px rgba(255,77,103,0.35)}
+.toast-enter{animation:toastIn .4s ease forwards}
+.toast-exit{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(-20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-20px) scale(.95)}}
+.file-item{transition:all .3s}
+.file-item:hover{background:rgba(255,255,255,0.9)}
+@media(max-width:767px){.mobile-full{padding-left:1.5rem;padding-right:1.5rem}}
+</style>
+</head>
+<body class="min-h-screen flex font-sans overflow-x-hidden">
+
+<!-- Ambient Background (desktop only) -->
+<div class="hidden md:block fixed inset-0 z-0 pointer-events-none opacity-50">
+<div class="absolute -top-[10%] -right-[5%] w-[700px] h-[700px] rounded-full bg-appAccent/8 blur-[120px]"></div>
+<div class="absolute -bottom-[10%] -left-[10%] w-[500px] h-[500px] rounded-full bg-purple-500/5 blur-[100px]"></div>
+<div class="absolute top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-blue-400/4 blur-[80px]"></div>
+</div>
+
+<!-- ===== SIDEBAR (Desktop) ===== -->
+<nav id="sidebar" class="hidden md:flex fixed left-0 top-0 h-screen w-[280px] flex-col sidebar-glass z-50 p-5 transition-all duration-300">
+<div class="flex items-center gap-3 mb-10 px-2 mt-2">
+<div class="w-10 h-10 rounded-xl bg-appAccent/10 flex items-center justify-center shrink-0">
+<i class="fa-solid fa-bolt text-appAccent text-lg"></i>
+</div>
+<div>
+<h1 class="text-lg font-extrabold text-appTextDark tracking-tight leading-none">Omni Tools</h1>
+<p class="text-[10px] font-bold text-appAccent tracking-[0.15em] mt-0.5">PRO SUITE</p>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1.5" id="sidebar-nav">
+<a data-page="home" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
+<i class="fa-solid fa-house w-5 text-center group-hover:scale-110 transition-transform"></i>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a data-page="image-tools" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
+<i class="fa-solid fa-image w-5 text-center group-hover:scale-110 transition-transform"></i>
+<span class="text-sm font-medium">Image Tools</span>
+</a>
+<a data-page="pdf-tools" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
+<i class="fa-solid fa-file-pdf w-5 text-center group-hover:scale-110 transition-transform"></i>
+<span class="text-sm font-medium">PDF Tools</span>
+</a>
+<a data-page="files" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
+<i class="fa-solid fa-folder-open w-5 text-center group-hover:scale-110 transition-transform"></i>
+<span class="text-sm font-medium">Files</span>
+</a>
+<a data-page="history" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
+<i class="fa-solid fa-clock-rotate-left w-5 text-center group-hover:scale-110 transition-transform"></i>
+<span class="text-sm font-medium">History</span>
+</a>
+<a data-page="settings" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group">
+<i class="fa-solid fa-gear w-5 text-center group-hover:scale-110 transition-transform"></i>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-2 pt-4 border-t border-gray-200/60">
+<button onclick="showToast('Pro features coming soon!','info')" class="w-full py-3 bg-gradient-to-r from-appAccent to-[#FF8E53] text-white rounded-xl text-sm font-bold hover:shadow-glow transition-all duration-300 flex items-center justify-center gap-2">
+<i class="fa-solid fa-crown text-xs"></i> Upgrade to Pro
+</button>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all" href="#">
+<i class="fa-solid fa-circle-question w-5 text-center"></i>
+<span class="text-sm font-medium">Help</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-appTextMuted hover:text-red-500 hover:bg-red-50 transition-all" href="#">
+<i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</nav>
+
+<!-- ===== MAIN WRAPPER ===== -->
+<div class="flex-1 md:ml-[280px] w-full min-h-screen flex flex-col relative z-10">
+
+<!-- ===== HEADER ===== -->
+<header class="sticky top-0 z-40 bg-appBg/85 backdrop-blur-lg border-b border-gray-100 px-4 md:px-6 h-16 md:h-20 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3 flex-1 max-w-2xl">
+<!-- Mobile Menu -->
+<button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+<i class="fa-solid fa-bars"></i>
+</button>
+<!-- Search -->
+<div class="relative w-full search-glass rounded-full flex items-center px-4 h-11 md:h-12">
+<i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+<input id="search-input" oninput="handleSearch(this.value)" class="w-full bg-transparent border-none focus:ring-0 text-appTextDark text-sm placeholder-gray-400 px-3 outline-none" placeholder="Search tools (e.g., 'compress pdf')..." type="text"/>
+<div class="hidden md:flex items-center gap-1">
+<span class="text-[10px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono">Ctrl</span>
+<span class="text-[10px] text-gray-400">+</span>
+<span class="text-[10px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono">K</span>
+</div>
+</div>
+</div>
+<div class="hidden md:flex items-center gap-3">
+<button onclick="showToast('No new notifications','info')" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-500 hover:text-appAccent">
+<i class="fa-solid fa-bell"></i>
+</button>
+<button onclick="toggleDarkMode()" class="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-500 hover:text-appAccent">
+<i class="fa-solid fa-moon"></i>
+</button>
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-appAccent to-[#FF8E53] flex items-center justify-center text-white text-sm font-bold cursor-pointer hover:scale-105 transition-transform shadow-md shadow-appAccent/20">O</div>
+</div>
+</header>
+
+<!-- ===== SEARCH RESULTS OVERLAY ===== -->
+<div id="search-overlay" class="hidden fixed inset-0 z-[60] bg-black/20 backdrop-blur-sm" onclick="closeSearch()">
+<div class="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-xl mx-4" onclick="event.stopPropagation()">
+<div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden max-h-[60vh] flex flex-col">
+<div class="p-4 border-b border-gray-100 flex items-center gap-3">
+<i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+<input id="search-overlay-input" oninput="handleOverlaySearch(this.value)" class="flex-1 bg-transparent outline-none text-sm text-appTextDark placeholder-gray-400" placeholder="Type to search tools..."/>
+<button onclick="closeSearch()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div id="search-results" class="overflow-y-auto p-2"></div>
+</div>
+</div>
+</div>
+
+<!-- ===== CONTENT AREA ===== -->
+<main id="content" class="flex-1 px-4 md:px-6 pb-24 md:pb-8">
+<!-- Content rendered by JS -->
+</main>
+
+</div>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/92 backdrop-blur-xl border-t border-gray-200 z-50 px-4 py-3">
+<div class="flex justify-around items-center">
+<button onclick="navigate('home')" data-mobnav="home" class="mob-nav-btn flex flex-col items-center gap-1 text-appAccent">
+<i class="fa-solid fa-house text-lg"></i>
+<span class="text-[9px] font-bold tracking-wider uppercase">Home</span>
+</button>
+<button onclick="navigate('files')" data-mobnav="files" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
+<i class="fa-solid fa-folder-open text-lg"></i>
+<span class="text-[9px] font-bold tracking-wider uppercase">Files</span>
+</button>
+<button onclick="navigate('history')" data-mobnav="history" class="mob-nav-btn flex flex-col items-center gap-1 text-gray-400">
+<i class="fa-solid fa-clock-rotate-left text-lg"></i>
+<span class="text-[9px] font-bold tracking-wider uppercase">History</span>
+</button>
+</div>
+</nav>
+
+<!-- ===== MOBILE SIDEBAR OVERLAY ===== -->
+<div id="mobile-menu" class="fixed inset-0 z-[55] hidden">
+<div class="absolute inset-0 bg-black/30 backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+<div class="absolute left-0 top-0 bottom-0 w-[280px] bg-white shadow-2xl p-5 flex flex-col transform transition-transform duration-300" id="mobile-menu-panel">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-appAccent/10 flex items-center justify-center">
+<i class="fa-solid fa-bolt text-appAccent text-lg"></i>
+</div>
+<div>
+<h1 class="text-lg font-extrabold text-appTextDark leading-none">Omni Tools</h1>
+<p class="text-[10px] font-bold text-appAccent tracking-[0.15em] mt-0.5">PRO SUITE</p>
+</div>
+</div>
+<button onclick="toggleMobileMenu()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+<i class="fa-solid fa-xmark text-sm"></i>
+</button>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<a onclick="navigate('home');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-house w-5 text-center"></i><span class="text-sm font-medium">Dashboard</span></a>
+<a onclick="navigate('image-tools');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-image w-5 text-center"></i><span class="text-sm font-medium">Image Tools</span></a>
+<a onclick="navigate('pdf-tools');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-file-pdf w-5 text-center"></i><span class="text-sm font-medium">PDF Tools</span></a>
+<a onclick="navigate('files');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-folder-open w-5 text-center"></i><span class="text-sm font-medium">Files</span></a>
+<a onclick="navigate('history');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-clock-rotate-left w-5 text-center"></i><span class="text-sm font-medium">History</span></a>
+<a onclick="navigate('settings');toggleMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-gray-50 transition-all"><i class="fa-solid fa-gear w-5 text-center"></i><span class="text-sm font-medium">Settings</span></a>
+</div>
+<button onclick="showToast('Pro features coming soon!','info');toggleMobileMenu()" class="mt-4 w-full py-3 bg-gradient-to-r from-appAccent to-[#FF8E53] text-white rounded-xl text-sm font-bold">
+<i class="fa-solid fa-crown mr-2 text-xs"></i>Upgrade to Pro
+</button>
+</div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div id="toast-container" class="fixed top-20 right-4 z-[70] flex flex-col gap-2 w-80"></div>
+
+<script>
+/* =========================================
+   TOOL DATA
+   ========================================= */
+const imageTools = [
+  {id:'resize',name:'Resize',icon:'fa-up-right-and-down-left-from-center',desc:'Adjust image dimensions',type:'image-editor'},
+  {id:'crop',name:'Crop',icon:'fa-crop-simple',desc:'Crop to specific area',type:'image-editor'},
+  {id:'filter',name:'Filter',icon:'fa-wand-magic-sparkles',desc:'Apply visual filters',type:'image-editor'},
+  {id:'convert-img',name:'Convert',icon:'fa-file-export',desc:'Convert image format',type:'simple'},
+  {id:'shrink',name:'Shrink',icon:'fa-compress',desc:'Reduce file size',type:'simple'},
+  {id:'bg-remove',name:'BG Rem',icon:'fa-eraser',desc:'Remove background',type:'image-editor'},
+  {id:'rotate',name:'Rotate',icon:'fa-rotate',desc:'Rotate or flip image',type:'image-editor'},
+  {id:'watermark',name:'Watermark',icon:'fa-stamp',desc:'Add text or image watermark',type:'simple'},
+  {id:'upscale',name:'Upscale',icon:'fa-expand',desc:'Increase resolution with AI',type:'image-editor'},
+  {id:'colorize',name:'Colorize',icon:'fa-palette',desc:'Add color to B&W photos',type:'image-editor'}
+];
+
+const pdfTools = [
+  {id:'merge',name:'Merge',icon:'fa-layer-group',desc:'Combine multiple PDFs',type:'file-list'},
+  {id:'split',name:'Split',icon:'fa-scissors',desc:'Extract pages from PDF',type:'file-list'},
+  {id:'compress-pdf',name:'Compress',icon:'fa-bolt',desc:'Reduce PDF file size',type:'simple'},
+  {id:'protect',name:'Protect',icon:'fa-lock',desc:'Add password to PDF',type:'simple'},
+  {id:'to-word',name:'To Word',icon:'fa-file-word',desc:'Convert PDF to DOCX',type:'simple'},
+  {id:'to-jpg',name:'To JPG',icon:'fa-file-image',desc:'Convert PDF to images',type:'simple'},
+  {id:'sign',name:'Sign',icon:'fa-signature',desc:'Add digital signature',type:'simple'},
+  {id:'page-numbers',name:'Numbers',icon:'fa-list-ol',desc:'Add page numbers',type:'simple'},
+  {id:'ocr',name:'OCR',icon:'fa-eye',desc:'Extract text from scans',type:'simple'},
+  {id:'organize',name:'Organize',icon:'fa-file-circle-plus',desc:'Rearrange PDF pages',type:'file-list'}
+];
+
+const allTools = [...imageTools.map(t=>({...t,cat:'image'})),...pdfTools.map(t=>({...t,cat:'pdf'}))];
+
+/* =========================================
+   STATE
+   ========================================= */
+let currentPage = 'home';
+let uploadedFiles = {};
+let searchQuery = '';
+
+/* =========================================
+   NAVIGATION
+   ========================================= */
+function navigate(page, data) {
+  currentPage = page;
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderPage(page, data);
+  updateNav(page);
+}
+
+function updateNav(page) {
+  // Sidebar
+  document.querySelectorAll('.sidebar-link').forEach(el => {
+    const p = el.dataset.page;
+    const isActive = (page === 'home' && p === 'home') ||
+                     (page === 'image-tools' && p === 'image-tools') ||
+                     (page === 'pdf-tools' && p === 'pdf-tools') ||
+                     (page === 'files' && p === 'files') ||
+                     (page === 'history' && p === 'history') ||
+                     (page === 'settings' && p === 'settings') ||
+                     (page.startsWith('tool/') && (p === 'image-tools' || p === 'pdf-tools'));
+    if (isActive) {
+      el.className = 'sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl bg-appAccent/10 text-appAccent font-bold transition-all duration-300';
+    } else {
+      el.className = 'sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-appTextMuted hover:text-appAccent hover:bg-black/[0.03] transition-all duration-300 group';
+    }
+  });
+  // Mobile nav
+  document.querySelectorAll('.mob-nav-btn').forEach(el => {
+    const p = el.dataset.mobnav;
+    const isActive = (page === 'home' && p === 'home') || (page === 'files' && p === 'files') || (page === 'history' && p === 'history');
+    el.className = `mob-nav-btn flex flex-col items-center gap-1 ${isActive ? 'text-appAccent' : 'text-gray-400'}`;
+  });
+}
+
+/* =========================================
+   PAGE RENDERER
+   ========================================= */
+function renderPage(page, data) {
+  const c = document.getElementById('content');
+  if (page === 'home') c.innerHTML = renderHomePage();
+  else if (page === 'image-tools') c.innerHTML = renderCategoryPage('image', 'Image Tools', 'fa-image', iconBgPink, 'appAccent');
+  else if (page === 'pdf-tools') c.innerHTML = renderCategoryPage('pdf', 'PDF Tools', 'fa-file-pdf', pdfBlueBg, 'pdfBlue');
+  else if (page === 'files') c.innerHTML = renderFilesPage();
+  else if (page === 'history') c.innerHTML = renderHistoryPage();
+  else if (page === 'settings') c.innerHTML = renderSettingsPage();
+  else if (page.startsWith('tool/')) {
+    const toolId = page.replace('tool/','');
+    const tool = allTools.find(t => t.id === toolId);
+    if (tool) c.innerHTML = renderToolPage(tool);
+  }
+  c.querySelector('.page-enter')?.offsetHeight; // trigger reflow
+}
+
+/* =========================================
+   HOME PAGE
+   ========================================= */
+function renderHomePage() {
+  return `<div class="page-enter">
+  <!-- Mobile Hero Card -->
+  <section class="md:hidden mt-4">
+    <div class="bg-white rounded-4xl p-6 relative overflow-hidden h-[180px] flex flex-col justify-between shadow-card border border-gray-50 cursor-pointer" onclick="navigate('files')">
+      <div class="flex justify-between items-start">
+        <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-arrow-up-from-bracket text-xl text-gray-700"></i>
+        </div>
+        <button class="bg-appAccent hover:bg-appAccentHover text-white px-4 py-2 rounded-full text-[10px] font-bold tracking-wider transition-colors shadow-lg shadow-appAccent/30">
+          START SESSION
+        </button>
+      </div>
+      <div class="mt-auto z-10 relative">
+        <h2 class="text-2xl font-black leading-none tracking-tight mb-1">Select File</h2>
+        <p class="text-gray-500 text-[9px] font-bold tracking-widest uppercase">Tap to load storage</p>
+      </div>
+      <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-appAccent/10 rounded-full blur-2xl"></div>
+      <div class="absolute -left-8 -top-8 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl"></div>
+    </div>
+  </section>
+
+  <!-- Desktop Welcome -->
+  <section class="hidden md:block mb-10 mt-6">
+    <h2 class="text-3xl font-bold text-appTextDark mb-2 tracking-tight">Welcome to Omni Tools</h2>
+    <p class="text-lg text-appTextMuted">Select a tool below to instantly process your files securely in the browser.</p>
+  </section>
+
+  <!-- Mobile: Image Tools Grid -->
+  <section class="md:hidden mt-6 flex flex-col gap-6">
+    ${renderMobileToolGrid('image')}
+    ${renderMobileToolGrid('pdf')}
+    <div class="text-center mt-8 mb-4">
+      <p class="text-gray-400 text-[10px] font-bold tracking-[0.3em] uppercase">OMNI TOOLS V2.0.1</p>
+    </div>
+  </section>
+
+  <!-- Desktop: Tool Sections -->
+  <section class="hidden md:block mt-2">
+    ${renderDesktopToolSection('Image Tools', 'fa-image', imageTools, 'appAccent', iconBgPink)}
+    <div class="my-10"></div>
+    ${renderDesktopToolSection('PDF Tools', 'fa-file-pdf', pdfTools, 'pdfBlue', pdfBlueBg)}
+  </section>
+</div>`;
+}
+
+/* Mobile Tool Grid - asymmetric layout like reference */
+function renderMobileToolGrid(cat) {
+  const tools = cat === 'image' ? imageTools : pdfTools;
+  const color = cat === 'image' ? 'appAccent' : 'pdfBlue';
+  const bg = cat === 'image' ? 'iconBgPink' : 'pdfBlueBg';
+  const label = cat === 'image' ? 'Image Tools' : 'PDF Tools';
+  let html = `<div><h3 class="text-appTextMuted text-[10px] font-bold tracking-[0.2em] mb-3 px-2 uppercase">${label}</h3><div class="grid grid-cols-3 gap-3 grid-flow-row-dense">`;
+  tools.forEach((t, i) => {
+    if (i === 0) {
+      html += `<button onclick="navigate('tool/${t.id}')" class="col-span-2 row-span-2 bg-white shadow-card border border-gray-50 rounded-[2rem] p-4 flex flex-col items-center justify-center gap-3 text-center hover:shadow-card-hover transition-all duration-300 group aspect-square">
+        <div class="w-16 h-16 rounded-2xl bg-${bg} flex items-center justify-center">
+          <i class="fa-solid ${t.icon} text-${color} text-2xl group-hover:scale-110 transition-transform"></i>
+        </div>
+        <span class="text-appTextDark text-sm font-bold">${t.name}</span>
+      </button>`;
+    } else if (i === 3 || i === 7) {
+      html += `<button onclick="navigate('tool/${t.id}')" class="col-span-2 row-span-1 bg-white shadow-card border border-gray-50 rounded-2xl p-4 flex flex-row items-center justify-start gap-4 hover:shadow-card-hover transition-all duration-300 group">
+        <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center shrink-0">
+          <i class="fa-solid ${t.icon} text-${color} text-sm group-hover:scale-110 transition-transform"></i>
+        </div>
+        <span class="text-appTextDark text-xs font-bold">${t.name}</span>
+      </button>`;
+    } else {
+      html += `<button onclick="navigate('tool/${t.id}')" class="bg-white shadow-card border border-gray-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 text-center hover:shadow-card-hover transition-all duration-300 group aspect-square">
+        <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center">
+          <i class="fa-solid ${t.icon} text-${color} text-sm group-hover:scale-110 transition-transform"></i>
+        </div>
+        <span class="text-appTextDark text-[10px] font-bold">${t.name}</span>
+      </button>`;
+    }
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+/* Desktop Tool Section */
+function renderDesktopToolSection(title, icon, tools, color, bg) {
+  let cards = tools.map(t => `
+    <button onclick="navigate('tool/${t.id}')" class="glass rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 group transition-all cursor-pointer">
+      <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-${color} shadow-sm group-hover:scale-110 transition-transform">
+        <i class="fa-solid ${t.icon}"></i>
+      </div>
+      <span class="text-sm font-medium text-appTextDark group-hover:text-${color} transition-colors">${t.name}</span>
+    </button>
+  `).join('');
+  return `<section>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center text-${color} border border-${color}/10">
+        <i class="fa-solid ${icon}"></i>
+      </div>
+      <h3 class="text-2xl font-semibold text-appTextDark">${title}</h3>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">${cards}</div>
+  </section>`;
+}
+
+/* =========================================
+   CATEGORY PAGE (Image Tools / PDF Tools)
+   ========================================= */
+function renderCategoryPage(cat, title, icon, bg, color) {
+  const tools = cat === 'image' ? imageTools : pdfTools;
+  const catLabel = cat === 'image' ? 'image-tools' : 'pdf-tools';
+  let cards = tools.map(t => `
+    <button onclick="navigate('tool/${t.id}')" class="glass rounded-xl p-5 flex flex-col items-center justify-center text-center gap-3 group transition-all cursor-pointer">
+      <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-${color} shadow-sm group-hover:scale-110 transition-transform">
+        <i class="fa-solid ${t.icon}"></i>
+      </div>
+      <span class="text-sm font-medium text-appTextDark group-hover:text-${color} transition-colors">${t.name}</span>
+      <span class="text-xs text-appTextMuted hidden md:block">${t.desc}</span>
+    </button>
+  `).join('');
+  return `<div class="page-enter">
+    <div class="mb-8 mt-4 md:mt-6">
+      <div class="flex items-center gap-2 text-appAccent mb-2 text-sm">
+        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('home')"></i>
+        <span class="cursor-pointer hover:underline" onclick="navigate('home')">Dashboard</span>
+      </div>
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-xl bg-${bg} flex items-center justify-center text-${color}">
+          <i class="fa-solid ${icon}"></i>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${title}</h2>
+      </div>
+      <p class="text-appTextMuted text-sm md:text-base">All ${title.toLowerCase()} in one place. Select a tool to get started.</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">${cards}</div>
+  </div>`;
+}
+
+/* =========================================
+   TOOL DETAIL PAGE
+   ========================================= */
+function renderToolPage(tool) {
+  const cat = tool.cat;
+  const color = cat === 'image' ? 'appAccent' : 'pdfBlue';
+  const bg = cat === 'image' ? iconBgPink : pdfBlueBg;
+  const catName = cat === 'image' ? 'Image Tools' : 'PDF Tools';
+  const catPage = cat === 'image' ? 'image-tools' : 'pdf-tools';
+  const accept = cat === 'image' ? 'image/*' : '.pdf';
+  const toolFiles = uploadedFiles[tool.id] || [];
+
+  if (tool.id === 'merge' || tool.id === 'split' || tool.id === 'organize') {
+    return renderFileListToolPage(tool, color, bg, catName, catPage, accept, toolFiles);
+  }
+  if (tool.type === 'image-editor') {
+    return renderImageEditorToolPage(tool, color, bg, catName, catPage, accept, toolFiles);
+  }
+  return renderSimpleToolPage(tool, color, bg, catName, catPage, accept, toolFiles);
+}
+
+/* File List Tool (Merge PDF, Split, Organize) */
+function renderFileListToolPage(tool, color, bg, catName, catPage, accept, toolFiles) {
+  const fileItems = toolFiles.map((f,i) => `
+    <div class="file-item flex items-center justify-between p-3 rounded-xl bg-white/60 border border-gray-100 group">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-grip-vertical text-gray-300 cursor-grab active:cursor-grabbing hover:text-${color} transition-colors"></i>
+        <div class="w-10 h-10 bg-red-50 text-red-500 rounded-lg flex items-center justify-center">
+          <i class="fa-solid fa-file-pdf"></i>
+        </div>
+        <div>
+          <p class="text-sm text-appTextDark font-semibold">${f.name}</p>
+          <p class="text-xs text-appTextMuted">${f.size} &bull; ${f.pages || Math.floor(Math.random()*20+1)} Pages</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button class="p-1.5 text-gray-400 hover:text-${color} hover:bg-${bg} rounded-md transition-colors"><i class="fa-solid fa-eye text-sm"></i></button>
+        <button onclick="removeFile('${tool.id}',${i})" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"><i class="fa-solid fa-xmark text-sm"></i></button>
+      </div>
+    </div>
+  `).join('');
+
+  return `<div class="page-enter">
+    <div class="mb-8 mt-4 md:mt-6">
+      <div class="flex items-center gap-2 text-${color} mb-2 text-sm">
+        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('${catPage}')"></i>
+        <span class="cursor-pointer hover:underline" onclick="navigate('${catPage}')">Back to ${catName}</span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${tool.name} PDF</h2>
+      <p class="text-appTextMuted text-sm md:text-base mt-1">${tool.desc}.</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8 flex flex-col gap-5">
+        <!-- Dropzone -->
+        <div class="glass rounded-2xl p-8 flex flex-col items-center justify-center text-center border-dashed border-2 border-${color}/25 drop-zone cursor-pointer hover:border-${color}/50 transition-colors min-h-[220px]" onclick="document.getElementById('file-input-${tool.id}').click()" ondragover="event.preventDefault();this.classList.add('border-${color}/60')" ondragleave="this.classList.remove('border-${color}/60')" ondrop="handleDrop(event,'${tool.id}','${accept}')">
+          <div class="w-16 h-16 bg-${bg} rounded-full flex items-center justify-center text-${color} mb-4">
+            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-appTextDark mb-2">Drag and Drop PDFs here</h3>
+          <p class="text-sm text-appTextMuted mb-5">or click to browse your files</p>
+          <button class="px-5 py-2 bg-white rounded-full border border-gray-200 text-sm text-appTextDark hover:bg-gray-50 shadow-sm transition-colors flex items-center gap-2" onclick="event.stopPropagation();document.getElementById('file-input-${tool.id}').click()">
+            <i class="fa-solid fa-plus text-xs"></i> Add More Files
+          </button>
+          <input type="file" id="file-input-${tool.id}" accept="${accept}" multiple class="hidden" onchange="handleFileSelect(this,'${tool.id}')"/>
+        </div>
+        <!-- File List -->
+        <div class="glass rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xs text-appTextMuted uppercase tracking-wider font-bold">Uploaded Files (${toolFiles.length})</h3>
+            ${toolFiles.length > 0 ? `<button onclick="clearFiles('${tool.id}')" class="text-red-500 text-xs font-semibold hover:underline flex items-center gap-1"><i class="fa-solid fa-trash-can text-[10px]"></i> Clear All</button>` : ''}
+          </div>
+          ${toolFiles.length > 0 ? `<div class="space-y-3">${fileItems}</div>` : `<p class="text-sm text-appTextMuted text-center py-8">No files uploaded yet. Drop PDFs above to get started.</p>`}
+        </div>
+      </div>
+      <!-- Settings Panel -->
+      <div class="lg:col-span-4">
+        <div class="glass rounded-2xl p-6 sticky top-24 flex flex-col gap-6">
+          <div>
+            <h3 class="text-lg font-semibold text-appTextDark mb-1">${tool.name} Settings</h3>
+            <p class="text-xs text-appTextMuted">Configure how your files will be processed.</p>
+          </div>
+          <div class="space-y-5 flex-1">
+            ${tool.id === 'merge' ? `
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Merge Style</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label class="cursor-pointer">
+                  <input type="radio" name="mergeStyle" checked class="peer sr-only"/>
+                  <div class="text-center p-3 rounded-xl border border-gray-200 peer-checked:border-${color} peer-checked:bg-${bg} peer-checked:text-${color} transition-all">
+                    <i class="fa-solid fa-file-lines block mb-1 text-lg"></i>
+                    <span class="text-xs font-semibold">Standard</span>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="mergeStyle" class="peer sr-only"/>
+                  <div class="text-center p-3 rounded-xl border border-gray-200 peer-checked:border-${color} peer-checked:bg-${bg} peer-checked:text-${color} transition-all">
+                    <i class="fa-solid fa-book block mb-1 text-lg"></i>
+                    <span class="text-xs font-semibold">Booklet</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Page Selection</label>
+              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none">
+                <option>All Pages</option><option>Custom Range</option><option>Odd Pages Only</option><option>Even Pages Only</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Filename</label>
+              <div class="flex items-center">
+                <input type="text" value="Merged_Document" class="flex-1 bg-white border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none border-r-0"/>
+                <span class="bg-gray-100 border border-gray-200 border-l-0 rounded-r-xl px-4 py-2.5 text-sm text-appTextMuted">.pdf</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <div><span class="text-sm text-appTextDark block font-medium">Add Table of Contents</span><span class="text-xs text-appTextMuted">Generate from filenames</span></div>
+              <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+            </div>` : `
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Page Range</label>
+              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none">
+                <option>All Pages</option><option>Custom Range</option><option>First Page Only</option><option>Last Page Only</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Filename</label>
+              <div class="flex items-center">
+                <input type="text" value="${tool.name}_Output" class="flex-1 bg-white border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} focus:ring-1 focus:ring-${color}/30 outline-none border-r-0"/>
+                <span class="bg-gray-100 border border-gray-200 border-l-0 rounded-r-xl px-4 py-2.5 text-sm text-appTextMuted">.pdf</span>
+              </div>
+            </div>`}
+          </div>
+          <div class="mt-6 pt-6 border-t border-gray-100">
+            <button onclick="processFiles('${tool.id}','${tool.name}')" class="w-full py-4 rounded-xl text-sm font-bold text-white shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4)">
+              <i class="fa-solid ${tool.icon}"></i> ${tool.name} ${toolFiles.length > 0 ? toolFiles.length + ' File'+(toolFiles.length>1?'s':'') : 'Files'}
+            </button>
+            <p class="text-center text-xs text-appTextMuted mt-3">${toolFiles.length > 0 ? 'Estimated output size: ~' + (toolFiles.reduce((a,f)=>a+f.sizeNum,0)/1024/1024).toFixed(1) + ' MB' : 'Upload files to begin'}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Image Editor Tool (Resize, Crop, etc.) */
+function renderImageEditorToolPage(tool, color, bg, catName, catPage, accept, toolFiles) {
+  const hasFile = toolFiles.length > 0;
+  const previewSrc = hasFile ? toolFiles[0].dataUrl : '';
+  const isResize = tool.id === 'resize';
+
+  return `<div class="page-enter">
+    <div class="mb-6 mt-4 md:mt-6">
+      <div class="flex items-center gap-2 text-${color} mb-2 text-sm">
+        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('${catPage}')"></i>
+        <span class="cursor-pointer hover:underline" onclick="navigate('${catPage}')">Back to ${catName}</span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${tool.name} Image</h2>
+      <p class="text-appTextMuted text-sm md:text-base mt-1">${tool.desc}.</p>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+      <!-- Preview Area -->
+      <div class="flex-1 w-full glass rounded-2xl p-5 flex flex-col min-h-[400px] md:min-h-[560px] relative overflow-hidden group">
+        <div class="absolute inset-0 opacity-30" style="background-image:url('data:image/svg+xml,%3Csvg width=&quot;20&quot; height=&quot;20&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Ccircle cx=&quot;2&quot; cy=&quot;2&quot; r=&quot;1.5&quot; fill=&quot;%23e5e7eb&quot; opacity=&quot;0.5&quot;/%3E%3C/svg%3E')"></div>
+        <div class="flex justify-between items-center mb-4 relative z-10">
+          <div class="flex gap-2 flex-wrap">
+            ${hasFile ? `<span class="px-3 py-1 bg-white/80 rounded-full text-xs text-appTextMuted border border-gray-200 backdrop-blur-md">Original: ${toolFiles[0].width || '---'}</span>
+            <span class="px-3 py-1 bg-${bg} rounded-full text-xs text-${color} border border-${color}/20 backdrop-blur-md">Modified</span>` : ''}
+          </div>
+          <button class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-appTextMuted hover:text-${color} transition-colors border border-gray-200 backdrop-blur-md">
+            <i class="fa-solid fa-expand text-xs"></i>
+          </button>
+        </div>
+        <div class="flex-1 w-full flex items-center justify-center relative z-10 border-2 border-dashed border-gray-200 rounded-xl bg-white/30 backdrop-blur-sm overflow-hidden cursor-pointer" onclick="document.getElementById('file-input-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
+          ${hasFile ? `<img src="${previewSrc}" class="max-w-full max-h-full object-contain drop-shadow-xl p-3 transition-transform duration-500 group-hover:scale-[1.02]"/>` :
+          `<div class="text-center p-8">
+            <div class="w-16 h-16 bg-${bg} rounded-full flex items-center justify-center text-${color} mx-auto mb-4">
+              <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+            </div>
+            <h3 class="text-base font-semibold text-appTextDark mb-1">Drop Image Here</h3>
+            <p class="text-sm text-appTextMuted">or click to browse</p>
+          </div>`}
+          <input type="file" id="file-input-${tool.id}" accept="${accept}" class="hidden" onchange="handleFileSelect(this,'${tool.id}')"/>
+        </div>
+      </div>
+      <!-- Settings Panel -->
+      <div class="w-full lg:w-[360px] flex flex-col gap-5 shrink-0">
+        <!-- Dimensions (for Resize) -->
+        ${isResize ? `<div class="glass rounded-2xl p-6">
+          <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2">
+            <i class="fa-solid ${tool.icon} text-${color} text-sm"></i> Dimensions
+          </h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <label class="block text-xs text-appTextMuted mb-2 font-medium">Unit</label>
+              <select class="w-full appearance-none bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none cursor-pointer">
+                <option>Pixels (px)</option><option>Percentage (%)</option><option>Inches (in)</option><option>Centimeters (cm)</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex-1">
+                <label class="block text-xs text-appTextMuted mb-2 font-medium">Width</label>
+                <input type="number" value="${hasFile ? (toolFiles[0].width ? Math.round(toolFiles[0].width*0.5) : 1200) : 1200}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none text-center"/>
+              </div>
+              <div class="flex flex-col items-center justify-end pt-6">
+                <button class="w-8 h-8 rounded-full bg-${bg} text-${color} flex items-center justify-center hover:bg-${color}/20 transition-colors" title="Lock aspect ratio">
+                  <i class="fa-solid fa-link text-xs"></i>
+                </button>
+              </div>
+              <div class="flex-1">
+                <label class="block text-xs text-appTextMuted mb-2 font-medium">Height</label>
+                <input type="number" value="${hasFile ? (toolFiles[0].height ? Math.round(toolFiles[0].height*0.5) : 900) : 900}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none text-center"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-appTextMuted mb-2 font-medium">Presets</label>
+              <div class="flex flex-wrap gap-2">
+                <button class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-appTextMuted hover:bg-gray-50 transition-colors">1080p</button>
+                <button class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-appTextMuted hover:bg-gray-50 transition-colors">720p</button>
+                <button class="px-3 py-1.5 rounded-lg border border-${color} text-xs text-${color} bg-${bg} transition-colors">Custom</button>
+                <button class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-appTextMuted hover:bg-gray-50 transition-colors">4K</button>
+              </div>
+            </div>
+          </div>
+        </div>` : ''}
+
+        <!-- Output Settings -->
+        <div class="glass rounded-2xl p-6">
+          <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-${color} text-sm"></i> Output Settings
+          </h3>
+          <div class="flex flex-col gap-5">
+            <div>
+              <label class="block text-xs text-appTextMuted mb-3 font-medium">Format</label>
+              <div class="grid grid-cols-3 gap-2">
+                ${['JPG','PNG','WebP'].map((f,i) => `
+                <label class="cursor-pointer">
+                  <input type="radio" name="format-${tool.id}" ${i===0?'checked':''} class="peer sr-only"/>
+                  <div class="text-center py-2 border border-gray-200 rounded-xl text-xs text-appTextMuted peer-checked:bg-${bg} peer-checked:border-${color} peer-checked:text-${color} transition-all font-medium">${f}</div>
+                </label>`).join('')}
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs text-appTextMuted font-medium">Quality</label>
+                <span class="text-xs text-${color} bg-${bg} px-2 py-0.5 rounded font-medium" id="quality-val-${tool.id}">85%</span>
+              </div>
+              <input type="range" min="1" max="100" value="85" class="w-full liquid-slider" oninput="document.getElementById('quality-val-${tool.id}').textContent=this.value+'%'"/>
+              <div class="flex justify-between mt-2"><span class="text-[10px] text-gray-400">Smaller File</span><span class="text-[10px] text-gray-400">Better Quality</span></div>
+            </div>
+            ${!isResize ? `
+            <div>
+              <label class="block text-xs text-appTextMuted mb-2 font-medium">Strength</label>
+              <input type="range" min="0" max="100" value="50" class="w-full liquid-slider"/>
+            </div>` : ''}
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <button onclick="${hasFile ? `processFiles('${tool.id}','${tool.name}')` : `document.getElementById('file-input-${tool.id}').click()`}" class="w-full py-4 rounded-xl text-sm font-bold text-white shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4)">
+          <i class="fa-solid ${hasFile ? 'fa-download' : 'fa-arrow-up-from-bracket'}"></i> ${hasFile ? `Download ${tool.name}d Image` : 'Upload Image First'}
+        </button>
+        <p class="text-center text-xs text-appTextMuted">${hasFile ? 'Estimated size: ~' + Math.round((toolFiles[0].sizeNum||500000)*0.4/1024) + ' KB' : 'Upload an image to get started'}</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Simple Tool Page (Compress, Convert, etc.) */
+function renderSimpleToolPage(tool, color, bg, catName, catPage, accept, toolFiles) {
+  const hasFile = toolFiles.length > 0;
+  return `<div class="page-enter">
+    <div class="mb-8 mt-4 md:mt-6">
+      <div class="flex items-center gap-2 text-${color} mb-2 text-sm">
+        <i class="fa-solid fa-arrow-left cursor-pointer" onclick="navigate('${catPage}')"></i>
+        <span class="cursor-pointer hover:underline" onclick="navigate('${catPage}')">Back to ${catName}</span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold text-appTextDark tracking-tight">${tool.name}</h2>
+      <p class="text-appTextMuted text-sm md:text-base mt-1">${tool.desc}.</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8 flex flex-col gap-5">
+        <div class="glass rounded-2xl p-8 flex flex-col items-center justify-center text-center border-dashed border-2 border-${color}/25 drop-zone cursor-pointer hover:border-${color}/50 transition-colors min-h-[280px]" onclick="document.getElementById('file-input-${tool.id}').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event,'${tool.id}','${accept}')">
+          <div class="w-20 h-20 bg-${bg} rounded-full flex items-center justify-center text-${color} mb-5 float-anim">
+            <i class="fa-solid ${tool.icon} text-3xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-appTextDark mb-2">${hasFile ? toolFiles[0].name : 'Drag and Drop Files Here'}</h3>
+          <p class="text-sm text-appTextMuted mb-5">${hasFile ? (toolFiles[0].size + ' — Tap to replace') : 'or click to browse'}</p>
+          <button class="px-5 py-2.5 bg-white rounded-full border border-gray-200 text-sm text-appTextDark hover:bg-gray-50 shadow-sm transition-colors flex items-center gap-2" onclick="event.stopPropagation();document.getElementById('file-input-${tool.id}').click()">
+            <i class="fa-solid fa-plus text-xs"></i> ${hasFile ? 'Replace File' : 'Choose File'}
+          </button>
+          <input type="file" id="file-input-${tool.id}" accept="${accept}" class="hidden" onchange="handleFileSelect(this,'${tool.id}')"/>
+        </div>
+        ${hasFile ? `<div class="glass rounded-2xl p-5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-${bg} text-${color} rounded-lg flex items-center justify-center"><i class="fa-solid ${tool.cat==='image'?'fa-image':'fa-file-pdf'}"></i></div>
+              <div><p class="text-sm font-semibold text-appTextDark">${toolFiles[0].name}</p><p class="text-xs text-appTextMuted">${toolFiles[0].size}</p></div>
+            </div>
+            <button onclick="removeFile('${tool.id}',0)" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>` : ''}
+      </div>
+      <div class="lg:col-span-4">
+        <div class="glass rounded-2xl p-6 sticky top-24 flex flex-col gap-6">
+          <div>
+            <h3 class="text-lg font-semibold text-appTextDark mb-1">Settings</h3>
+            <p class="text-xs text-appTextMuted">Configure output options.</p>
+          </div>
+          <div class="space-y-5 flex-1">
+            ${tool.id.includes('compress') ? `
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-sm text-appTextDark font-medium">Compression Level</label>
+                <span class="text-xs text-${color} bg-${bg} px-2 py-0.5 rounded font-medium" id="compress-val">Medium</span>
+              </div>
+              <input type="range" min="1" max="3" value="2" class="w-full liquid-slider" oninput="document.getElementById('compress-val').textContent=['Low','Medium','High'][this.value-1]"/>
+            </div>` : ''}
+            ${tool.id === 'protect' ? `
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Password</label>
+              <input type="password" placeholder="Enter password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none"/>
+            </div>
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Confirm Password</label>
+              <input type="password" placeholder="Confirm password" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none"/>
+            </div>` : ''}
+            ${tool.id === 'to-word' || tool.id === 'to-jpg' ? `
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Format</label>
+              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none">
+                ${tool.id === 'to-word' ? '<option>DOCX</option><option>DOC</option><option>RTF</option><option>TXT</option>' : '<option>JPG</option><option>PNG</option><option>WebP</option>'}
+              </select>
+            </div>` : ''}
+            ${tool.id === 'watermark' ? `
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Watermark Text</label>
+              <input type="text" placeholder="e.g., CONFIDENTIAL" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none"/>
+            </div>
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Position</label>
+              <select class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none">
+                <option>Center</option><option>Bottom Right</option><option>Bottom Left</option><option>Tiled</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Opacity</label>
+              <input type="range" min="10" max="100" value="30" class="w-full liquid-slider"/>
+            </div>` : ''}
+            <div>
+              <label class="block text-sm text-appTextDark mb-2 font-medium">Output Filename</label>
+              <div class="flex items-center">
+                <input type="text" value="${tool.name}_Output" class="flex-1 bg-white border border-gray-200 rounded-l-xl px-4 py-2.5 text-sm text-appTextDark focus:border-${color} outline-none border-r-0"/>
+                <span class="bg-gray-100 border border-gray-200 border-l-0 rounded-r-xl px-4 py-2.5 text-sm text-appTextMuted">.${tool.cat==='image'?'jpg':'pdf'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-6 border-t border-gray-100">
+            <button onclick="${hasFile ? `processFiles('${tool.id}','${tool.name}')` : `document.getElementById('file-input-${tool.id}').click()`}" class="w-full py-4 rounded-xl text-sm font-bold text-white shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]" style="background:linear-gradient(135deg,#FF6B6B 0%,#FF8E53 100%);box-shadow:0 10px 20px -5px rgba(255,107,107,0.4)">
+              <i class="fa-solid ${hasFile ? 'fa-download' : 'fa-arrow-up-from-bracket'}"></i> ${hasFile ? `Process & Download` : 'Upload File First'}
+            </button>
+            <p class="text-center text-xs text-appTextMuted mt-3">${hasFile ? 'Ready to process' : 'Upload a file to begin'}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   FILES PAGE
+   ========================================= */
+function renderFilesPage() {
+  const allFiles = Object.entries(uploadedFiles).flatMap(([toolId, files]) => files.map(f => ({...f, toolId})));
+  return `<div class="page-enter mt-4 md:mt-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-appTextDark mb-2 tracking-tight">My Files</h2>
+    <p class="text-sm md:text-base text-appTextMuted mb-6">All your recently uploaded files in one place.</p>
+    ${allFiles.length > 0 ? `
+    <div class="space-y-3">
+      ${allFiles.map((f,i) => `
+      <div class="glass rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg ${f.toolId.includes('pdf') || pdfTools.some(t=>t.id===f.toolId) ? 'bg-blue-50 text-blue-500' : 'bg-pink-50 text-appAccent'} flex items-center justify-center">
+            <i class="fa-solid ${f.toolId.includes('pdf') || pdfTools.some(t=>t.id===f.toolId) ? 'fa-file-pdf' : 'fa-image'}"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-appTextDark">${f.name}</p>
+            <p class="text-xs text-appTextMuted">${f.size} &bull; ${allTools.find(t=>t.id===f.toolId)?.name || f.toolId}</p>
+          </div>
+        </div>
+        <button onclick="removeFile('${f.toolId}',${uploadedFiles[f.toolId].indexOf(f)});navigate('files')" class="text-gray-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can text-sm"></i></button>
+      </div>`).join('')}
+    </div>` : `
+    <div class="glass rounded-2xl p-12 text-center">
+      <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid fa-folder-open text-3xl text-gray-300"></i>
+      </div>
+      <h3 class="text-lg font-semibold text-appTextDark mb-2">No files yet</h3>
+      <p class="text-sm text-appTextMuted mb-5">Upload files using any tool to see them here.</p>
+      <button onclick="navigate('home')" class="px-6 py-2.5 bg-appAccent text-white rounded-full text-sm font-bold hover:bg-appAccentHover transition-colors">Browse Tools</button>
+    </div>`}
+  </div>`;
+}
+
+/* =========================================
+   HISTORY PAGE
+   ========================================= */
+function renderHistoryPage() {
+  return `<div class="page-enter mt-4 md:mt-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-appTextDark mb-2 tracking-tight">History</h2>
+    <p class="text-sm md:text-base text-appTextMuted mb-6">Track all your file processing activities.</p>
+    <div class="glass rounded-2xl p-12 text-center">
+      <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid fa-clock-rotate-left text-3xl text-gray-300"></i>
+      </div>
+      <h3 class="text-lg font-semibold text-appTextDark mb-2">No history yet</h3>
+      <p class="text-sm text-appTextMuted mb-5">Process files to build your activity history.</p>
+      <button onclick="navigate('home')" class="px-6 py-2.5 bg-appAccent text-white rounded-full text-sm font-bold hover:bg-appAccentHover transition-colors">Get Started</button>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   SETTINGS PAGE
+   ========================================= */
+function renderSettingsPage() {
+  return `<div class="page-enter mt-4 md:mt-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-appTextDark mb-2 tracking-tight">Settings</h2>
+    <p class="text-sm md:text-base text-appTextMuted mb-8">Customize your Omni Tools experience.</p>
+    <div class="max-w-2xl space-y-4">
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2"><i class="fa-solid fa-palette text-appAccent text-sm"></i> Appearance</h3>
+        <div class="flex items-center justify-between py-3 border-b border-gray-100">
+          <div><span class="text-sm text-appTextDark block font-medium">Dark Mode</span><span class="text-xs text-appTextMuted">Switch to dark theme</span></div>
+          <div class="toggle-track" onclick="toggleDarkMode();this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="flex items-center justify-between py-3">
+          <div><span class="text-sm text-appTextDark block font-medium">Animations</span><span class="text-xs text-appTextMuted">Enable UI animations</span></div>
+          <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2"><i class="fa-solid fa-folder text-appAccent text-sm"></i> Storage</h3>
+        <div class="mb-4">
+          <div class="flex justify-between text-sm mb-2"><span class="text-appTextDark font-medium">Used Space</span><span class="text-appTextMuted">0 MB / 500 MB</span></div>
+          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-appAccent to-[#FF8E53] rounded-full" style="width:0%"></div></div>
+        </div>
+        <button onclick="showToast('Cache cleared successfully','success')" class="text-sm text-appAccent font-medium hover:underline">Clear Cache</button>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-base font-semibold text-appTextDark mb-5 flex items-center gap-2"><i class="fa-solid fa-shield-halved text-appAccent text-sm"></i> Privacy</h3>
+        <div class="flex items-center justify-between py-3 border-b border-gray-100">
+          <div><span class="text-sm text-appTextDark block font-medium">Process Locally</span><span class="text-xs text-appTextMuted">All files stay in your browser</span></div>
+          <div class="toggle-track active" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="flex items-center justify-between py-3">
+          <div><span class="text-sm text-appTextDark block font-medium">Auto-delete Files</span><span class="text-xs text-appTextMuted">Remove files after processing</span></div>
+          <div class="toggle-track" onclick="this.classList.toggle('active')"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+      <div class="glass rounded-2xl p-6">
+        <h3 class="text-base font-semibold text-appTextDark mb-3 flex items-center gap-2"><i class="fa-solid fa-circle-info text-appAccent text-sm"></i> About</h3>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-appTextMuted">Version</span><span class="text-appTextDark font-medium">2.0.1</span></div>
+          <div class="flex justify-between"><span class="text-appTextMuted">Engine</span><span class="text-appTextDark font-medium">Browser Native</span></div>
+          <div class="flex justify-between"><span class="text-appTextMuted">License</span><span class="text-appTextDark font-medium">Pro</span></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* =========================================
+   FILE HANDLING
+   ========================================= */
+function handleFileSelect(input, toolId) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  if (!uploadedFiles[toolId]) uploadedFiles[toolId] = [];
+  files.forEach(f => {
+    const fileObj = {name: f.name, size: formatSize(f.size), sizeNum: f.size};
+    if (f.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          fileObj.dataUrl = e.target.result;
+          fileObj.width = img.naturalWidth + ' x ' + img.naturalHeight;
+          uploadedFiles[toolId].push(fileObj);
+          renderPage(currentPage);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(f);
+    } else {
+      fileObj.pages = Math.floor(Math.random() * 20 + 1);
+      uploadedFiles[toolId].push(fileObj);
+      renderPage(currentPage);
+    }
+  });
+  input.value = '';
+  showToast(`${files.length} file${files.length>1?'s':''} uploaded`, 'success');
+}
+
+function handleDrop(event, toolId, accept) {
+  event.preventDefault();
+  event.currentTarget.classList.remove('border-appAccent/60','border-pdfBlue/60');
+  const files = Array.from(event.dataTransfer.files).filter(f => {
+    if (accept === 'image/*') return f.type.startsWith('image/');
+    return f.name.endsWith('.pdf');
+  });
+  if (!files.length) { showToast('Unsupported file type', 'error'); return; }
+  const dt = new DataTransfer();
+  files.forEach(f => dt.items.add(f));
+  const input = document.getElementById('file-input-' + toolId);
+  if (input) { input.files = dt.files; handleFileSelect(input, toolId); }
+}
+
+function removeFile(toolId, index) {
+  if (uploadedFiles[toolId]) {
+    uploadedFiles[toolId].splice(index, 1);
+    renderPage(currentPage);
+    showToast('File removed', 'info');
+  }
+}
+
+function clearFiles(toolId) {
+  uploadedFiles[toolId] = [];
+  renderPage(currentPage);
+  showToast('All files cleared', 'info');
+}
+
+function processFiles(toolId, toolName) {
+  showToast(`${toolName} completed successfully!`, 'success');
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+/* =========================================
+   SEARCH
+   ========================================= */
+function handleSearch(value) {
+  if (value.length > 0) {
+    openSearch(value);
+  } else {
+    closeSearch();
+  }
+}
+
+function openSearch(query) {
+  const overlay = document.getElementById('search-overlay');
+  const input = document.getElementById('search-overlay-input');
+  overlay.classList.remove('hidden');
+  input.value = query || '';
+  input.focus();
+  handleOverlaySearch(query || '');
+}
+
+function closeSearch() {
+  document.getElementById('search-overlay').classList.add('hidden');
+  document.getElementById('search-input').value = '';
+}
+
+function handleOverlaySearch(query) {
+  const container = document.getElementById('search-results');
+  if (!query.trim()) { container.innerHTML = '<p class="text-sm text-appTextMuted text-center py-8">Start typing to search tools...</p>'; return; }
+  const results = allTools.filter(t => t.name.toLowerCase().includes(query.toLowerCase()) || t.desc.toLowerCase().includes(query.toLowerCase()) || t.cat.includes(query.toLowerCase()));
+  if (!results.length) { container.innerHTML = '<p class="text-sm text-appTextMuted text-center py-8">No tools found for "' + query + '"</p>'; return; }
+  container.innerHTML = results.map(t => `
+    <button onclick="navigate('tool/${t.id}');closeSearch()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors text-left">
+      <div class="w-9 h-9 rounded-lg ${t.cat==='image' ? 'bg-iconBgPink text-appAccent' : 'bg-pdfBlueBg text-pdfBlue'} flex items-center justify-center shrink-0">
+        <i class="fa-solid ${t.icon} text-sm"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-appTextDark">${t.name}</p>
+        <p class="text-xs text-appTextMuted truncate">${t.desc} &bull; ${t.cat === 'image' ? 'Image Tool' : 'PDF Tool'}</p>
+      </div>
+      <i class="fa-solid fa-arrow-right text-xs text-gray-300"></i>
+    </button>
+  `).join('');
+}
+
+/* =========================================
+   TOAST NOTIFICATIONS
+   ========================================= */
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const icons = {success: 'fa-circle-check text-emerald-500', error: 'fa-circle-xmark text-red-500', info: 'fa-circle-info text-blue-500'};
+  const toast = document.createElement('div');
+  toast.className = 'toast-enter flex items-center gap-3 px-5 py-3.5 bg-white rounded-xl shadow-lg border border-gray-100';
+  toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span class="text-sm text-appTextDark font-medium flex-1">${message}</span><button onclick="this.parentElement.classList.add('toast-exit');setTimeout(()=>this.parentElement.remove(),300)" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-xs"></i></button>`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 300); }, 3500);
+}
+
+/* =========================================
+   MOBILE MENU
+   ========================================= */
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.toggle('hidden');
+}
+
+/* =========================================
+   DARK MODE (toggle visual only)
+   ========================================= */
+function toggleDarkMode() {
+  showToast('Dark mode coming soon in next update', 'info');
+}
+
+/* =========================================
+   KEYBOARD SHORTCUTS
+   ========================================= */
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearch();
+  }
+  if (e.key === 'Escape') {
+    closeSearch();
+    const menu = document.getElementById('mobile-menu');
+    if (!menu.classList.contains('hidden')) toggleMobileMenu();
+  }
+});
+
+/* =========================================
+   INIT
+   ========================================= */
+navigate('home');
+</script>
+</body>
+</html>
